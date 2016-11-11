@@ -21,7 +21,7 @@ public class Material extends BaseBean<Integer> {
     @NotNull(message = "Material é obrigatório.", groups = SaveGroup.class)
     @Size(min = 1, max = 50, message = "O material deve estar preenchido e possuir no máximo 50 caractéres.", groups = SaveGroup.class)
     private String material;
-    @NotNull(message = "Descrição do material é obrigatório.", groups = EPI.SaveGroup.class)
+    @NotNull(message = "Descrição do material é obrigatório.", groups = SaveGroup.class)
     @Size(min = 1, max = 4000, message = "A descrição do material deve estar preenchido e possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
     private String descricao;
     private Boolean ativo;

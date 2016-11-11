@@ -22,8 +22,8 @@ insert into tipomaterial  (id, tipomaterial) values (3, 'Tipo C');
 insert into tipomaterial  (id, tipomaterial) values (4, 'Tipo D');
 insert into tipomaterial  (id, tipomaterial) values (5, 'Tipo E');
 
-insert into tipoatributo(id, tipoatributo) values (1, 'Tipo A');
-insert into tipoatributo(id, tipoatributo) values (2, 'Tipo B');
-insert into tipoatributo(id, tipoatributo) values (3, 'Tipo C');
-insert into tipoatributo(id, tipoatributo) values (4, 'Tipo D');
-insert into tipoatributo(id, tipoatributo) values (5, 'Tipo E');
+insert into tipoatributo(id, tipoatributo,tipoDado) values (1, 'Tipo A', 0);
+insert into tipoatributo(id, tipoatributo,tipoDado) values (2, 'Tipo B',1);
+insert into tipoatributo(id, tipoatributo,tipoDado) values (3, 'Tipo C',2);
+insert into tipoatributo(id, tipoatributo,tipoDado) values (4, 'Normalizado',3);
+insert into tipoatributo(id, tipoatributo,tipoDado) values (5, 'Tipo E',0);

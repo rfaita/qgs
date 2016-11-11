@@ -3,6 +3,7 @@ package com.qgs.ui.view;
 import com.qgs.model.UsuarioProvedor;
 import com.qgs.ui.QGSUI;
 import com.qgs.service.secutiry.SecurityUtils;
+import com.qgs.ui.view.cadastro.AtributoView;
 import com.qgs.ui.view.cadastro.EPIView;
 import com.qgs.ui.view.cadastro.MaterialView;
 import com.qgs.ui.window.UsuarioProvedorWindow;
@@ -131,6 +132,7 @@ public class QGSMenu extends CustomComponent {
             items.put(DashboardView.VIEW_ID, new ItemMenu("Dashboard", FontAwesome.DASHBOARD, SecurityRole.USER));
             items.put(EPIView.VIEW_ID, new ItemMenu("EPI", FontAwesome.DIAMOND, SecurityRole.USER));
             items.put(MaterialView.VIEW_ID, new ItemMenu("Material", FontAwesome.DIAMOND, SecurityRole.USER));
+            items.put(AtributoView.VIEW_ID, new ItemMenu("Atributo", FontAwesome.DIAMOND, SecurityRole.USER));
         }
         return items;
     }

@@ -31,7 +31,7 @@ public class TipoDepartamentoWindow extends BaseWindow<Integer, TipoDepartamento
     private CheckBox ckAtivo;
 
     @EJB
-    private TipoDepartamentoService epiService;
+    private TipoDepartamentoService tipoDeptoService;
     @EJB
     private ListAllService listAllService;
 
@@ -58,7 +58,7 @@ public class TipoDepartamentoWindow extends BaseWindow<Integer, TipoDepartamento
     @Override
     protected void doLoadDados(Integer id) {
         if (id != null && id > 0) {
-            setDado(epiService.findById(id));
+            setDado(tipoDeptoService.findById(id));
 
             getTxtId().setValue(getDado().getId() + "");
             getTxtTipoDepartamento().setValue(getDado().getTipoDepartamento());
@@ -154,7 +154,7 @@ public class TipoDepartamentoWindow extends BaseWindow<Integer, TipoDepartamento
         }
 
         try {
-            epiService.save(getDado());
+            tipoDeptoService.save(getDado());
             QGSUI.showInfo("Dados salvos com sucesso.");
             sendRefresh();
             close();

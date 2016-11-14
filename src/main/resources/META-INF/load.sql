@@ -30,6 +30,10 @@ insert into tipoatributo(id, tipoatributo,tipoDado) values (2, 'Númerico',1);
 insert into tipoatributo(id, tipoatributo,tipoDado) values (3, 'Normalizado C',2);
 insert into tipoatributo(id, tipoatributo,tipoDado) values (4, 'Data',3);
 
+insert into prioridade(id, prioridade, ativo) values (1, 'Baixo', true);
+insert into prioridade(id, prioridade, ativo) values (2, 'Médio', true);
+insert into prioridade(id, prioridade, ativo) values (3, 'Alto', true);
+
 insert into pais(id, pais, abrev) values (1, 'Brasil', 'BR');
 
 insert into uf (id, descricao, uf, idpais) values (1,'Acre','AC',1);

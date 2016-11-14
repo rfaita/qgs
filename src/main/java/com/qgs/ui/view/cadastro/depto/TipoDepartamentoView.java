@@ -94,7 +94,7 @@ public final class TipoDepartamentoView extends BaseView<Integer, TipoDepartamen
 
     @Override
     protected String[] getColumnsLabels() {
-        return new String[]{"Código", "TipoDepartamento", "Tipo serviço atendido", "Critéri de seleção de setor"};
+        return new String[]{"Código", "Tipo Departamento", "Tipo serviço atendido", "Critério de seleção de setor"};
     }
 
     @Override

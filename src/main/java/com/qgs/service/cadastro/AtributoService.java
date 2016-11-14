@@ -52,6 +52,7 @@ public class AtributoService {
         ret.getValoresAtributo().size();
         return ret;
     }
+
     public Atributo findById(Integer id) {
         return helper.getEntityManager().find(Atributo.class, id);
     }
@@ -64,6 +65,9 @@ public class AtributoService {
 
         if (o.getAtributo() != null && !o.getAtributo().isEmpty()) {
             hql.append("AND upper(o.atributo) LIKE :atributo ");
+        }
+        if (o.getTipoAtributo() != null) {
+            hql.append("AND o.tipoDepartamento.id = :idTipoAtributo ");
         }
 
         hql.append("AND (coalesce(o.ativo, false) = true ");
@@ -82,6 +86,10 @@ public class AtributoService {
 
         if (o.getAtributo() != null && !o.getAtributo().isEmpty()) {
             q.setParameter("atributo", "%" + o.getAtributo().toUpperCase() + "%");
+        }
+
+        if (o.getTipoAtributo() != null) {
+            q.setParameter("idTipoAtributo", o.getTipoAtributo().getId());
         }
 
         return q.getResultList();

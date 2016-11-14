@@ -62,6 +62,10 @@ public class MaterialService {
             hql.append("AND upper(o.material) LIKE :material ");
         }
 
+        if (o.getTipoMaterial() != null) {
+            hql.append("AND o.tipoMaterial.id = :idTipoMaterial ");
+        }
+
         hql.append("AND (coalesce(o.ativo, false) = true ");
         if (o.getAtivo() != null && !o.getAtivo()) {
             hql.append("OR coalesce(o.ativo, false) = false ");
@@ -78,6 +82,10 @@ public class MaterialService {
 
         if (o.getMaterial() != null && !o.getMaterial().isEmpty()) {
             q.setParameter("material", "%" + o.getMaterial().toUpperCase() + "%");
+        }
+
+        if (o.getTipoMaterial() != null) {
+            q.setParameter("idTipoMaterial", o.getTipoMaterial().getId());
         }
 
         return q.getResultList();

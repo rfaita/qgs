@@ -16,6 +16,7 @@ import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 
@@ -54,8 +55,8 @@ public class AtributoWindow extends BaseWindow<Integer, Atributo> {
         content.addComponent(getTxtId());
         content.addComponent(getTxtAtributo());
         content.addComponent(getTxtDescricao());
-        content.addComponent(getCmbTipoAtributo());
         content.addComponent(getCkAtivo());
+        content.addComponent(getCmbTipoAtributo());
         content.addComponent(getTxtValorAtributo());
 
         HorizontalLayout h = new HorizontalLayout(getBtAdd(), getBtDel());
@@ -68,15 +69,12 @@ public class AtributoWindow extends BaseWindow<Integer, Atributo> {
 
         setContent(content);
 
-        setWidth(500, Unit.PIXELS);
-        setHeight(90.0f, Unit.PERCENTAGE);
-
     }
 
     @Override
     protected void doLoadDados(Integer id) {
         if (id != null && id > 0) {
-            setDado(atrService.findById(id));
+            setDado(atrService.findCompleteById(id));
 
             getTxtId().setValue(getDado().getId() + "");
             getTxtDescricao().setValue(getDado().getDescricao());
@@ -85,6 +83,7 @@ public class AtributoWindow extends BaseWindow<Integer, Atributo> {
             }
             getTxtAtributo().setValue(getDado().getAtributo());
             getCkAtivo().setValue(getDado().getAtivo());
+            getBcValorAtributo().addAll(getDado().getValoresAtributo());
         }
     }
 
@@ -102,7 +101,6 @@ public class AtributoWindow extends BaseWindow<Integer, Atributo> {
             txtValorAtributo = new TextField("Valor Atributo");
             txtValorAtributo.setEnabled(Boolean.FALSE);
             txtValorAtributo.setWidth(100, Unit.PERCENTAGE);
-            txtValorAtributo.setRequired(true);
         }
         return txtValorAtributo;
     }
@@ -240,6 +238,15 @@ public class AtributoWindow extends BaseWindow<Integer, Atributo> {
             getDado().setTipoAtributo(getBcTipoAtributo().getItem(getCmbTipoAtributo().getValue()).getBean());
         } else {
             getDado().setTipoAtributo(null);
+        }
+        getDado().setValoresAtributo(new ArrayList<ValorAtributo>());
+        for (Long id : getBcValorAtributo().getItemIds()) {
+            ValorAtributo va = getBcValorAtributo().getItem(id).getBean();
+            if (va.getId() != null && va.getId() < 0) {
+                va.setId(null);
+                va.setAtributo(getDado());
+            }
+            getDado().getValoresAtributo().add(va);
         }
 
         try {

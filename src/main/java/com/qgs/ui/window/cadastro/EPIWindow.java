@@ -42,9 +42,6 @@ public class EPIWindow extends BaseWindow<Integer, EPI> {
 
         setContent(content);
 
-        setWidth(500, Unit.PIXELS);
-        setHeight(90.0f, Unit.PERCENTAGE);
-
     }
 
     @Override

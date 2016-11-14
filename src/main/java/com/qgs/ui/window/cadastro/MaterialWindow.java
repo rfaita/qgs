@@ -50,9 +50,6 @@ public class MaterialWindow extends BaseWindow<Integer, Material> {
 
         setContent(content);
 
-        setWidth(500, Unit.PIXELS);
-        setHeight(90.0f, Unit.PERCENTAGE);
-
     }
 
     @Override

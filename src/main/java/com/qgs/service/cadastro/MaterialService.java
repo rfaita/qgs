@@ -64,6 +64,7 @@ public class MaterialService {
     public List<Material> findAllByMaterial(Material o) {
         StringBuilder hql = new StringBuilder("SELECT o FROM Material o ");
         hql.append("JOIN FETCH o.empresa ");
+        hql.append("JOIN FETCH o.tipoMaterial ");
         hql.append("WHERE o.empresa.id = :idEmpresa ");
 
         if (o.getMaterial() != null && !o.getMaterial().isEmpty()) {

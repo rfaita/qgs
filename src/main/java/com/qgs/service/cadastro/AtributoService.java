@@ -47,6 +47,11 @@ public class AtributoService {
         }
     }
 
+    public Atributo findCompleteById(Integer id) {
+        Atributo ret = findById(id);
+        ret.getValoresAtributo().size();
+        return ret;
+    }
     public Atributo findById(Integer id) {
         return helper.getEntityManager().find(Atributo.class, id);
     }
@@ -63,6 +68,7 @@ public class AtributoService {
     public List<Atributo> findAllByAtributo(Atributo o) {
         StringBuilder hql = new StringBuilder("SELECT o FROM Atributo o ");
         hql.append("JOIN FETCH o.empresa ");
+        hql.append("JOIN FETCH o.tipoAtributo ");
         hql.append("WHERE o.empresa.id = :idEmpresa ");
 
         if (o.getAtributo() != null && !o.getAtributo().isEmpty()) {

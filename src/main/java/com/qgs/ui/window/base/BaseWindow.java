@@ -36,15 +36,20 @@ public abstract class BaseWindow<ID, T extends BaseBean<ID>> extends Window {
     public BaseWindow(String styleWindow, String title) {
         super(title);
 
+        this.addStyleName("v-scrollable");
+
         addStyleName(styleWindow);
         Responsive.makeResponsive(this);
 
         center();
 
         addCloseShortcut(ShortcutAction.KeyCode.ESCAPE);
-        setResizable(true);
+        setResizable(false);
         setClosable(true);
         setModal(true);
+
+        setWidth(600, Unit.PIXELS);
+        setHeight(90.0f, Unit.PERCENTAGE);
     }
 
     public void open(ID id) {

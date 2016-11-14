@@ -2,6 +2,8 @@ package com.qgs;
 
 import java.io.File;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.wildfly.swarm.config.logging.Level;
+import org.wildfly.swarm.config.logging.Logger;
 import org.wildfly.swarm.config.security.Flag;
 import org.wildfly.swarm.config.security.SecurityDomain;
 import org.wildfly.swarm.config.security.security_domain.ClassicAuthentication;
@@ -9,6 +11,8 @@ import org.wildfly.swarm.config.security.security_domain.authentication.LoginMod
 import org.wildfly.swarm.container.Container;
 import org.wildfly.swarm.datasources.DatasourcesFraction;
 import org.wildfly.swarm.jpa.JPAFraction;
+import org.wildfly.swarm.logging.LoggingFraction;
+import org.wildfly.swarm.logging.LoggingProperties;
 import org.wildfly.swarm.security.SecurityFraction;
 import org.wildfly.swarm.undertow.WARArchive;
 import org.wildfly.swarm.undertow.descriptors.WebXmlAsset;
@@ -40,6 +44,13 @@ public class Main {
         container.fraction(new JPAFraction()
                 .inhibitDefaultDatasource()
                 .defaultDatasource("jboss/datasources/QGSDS")
+        );
+
+        Level leveLog = Level.valueOf(System.getProperty(LoggingProperties.LOGGING));
+
+        container.fraction(new LoggingFraction()
+                .logger(new Logger("org.hibernate.SQL").level(leveLog))
+                .logger(new Logger("org.hibernate.type.descriptor.sql.BasicBinder").level(leveLog))
         );
 
         container.fraction(SecurityFraction.defaultSecurityFraction()

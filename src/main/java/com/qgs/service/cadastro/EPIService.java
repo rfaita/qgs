@@ -51,15 +51,6 @@ public class EPIService {
         return helper.getEntityManager().find(EPI.class, id);
     }
 
-    public void inactivate(EPI epi) throws Exception {
-
-        EPI in = findById(epi.getId());
-        in.setAtivo(Boolean.FALSE);
-
-        helper.getEntityManager().merge(in);
-
-    }
-
     public List<EPI> findAllByEPI(EPI o) {
         StringBuilder hql = new StringBuilder("SELECT o FROM EPI o ");
         hql.append("JOIN FETCH o.empresa ");

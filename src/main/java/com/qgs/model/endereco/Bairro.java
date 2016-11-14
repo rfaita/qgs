@@ -8,6 +8,11 @@ import javax.persistence.*;
  * @author rafael
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Bairro.findAll", query = "SELECT o FROM Bairro o")
+    ,
+    @NamedQuery(name = "Bairro.findAllByParam", query = "SELECT o FROM Bairro o JOIN FETCH o.cidade WHERE o.cidade.id = :idCidade")
+})
 public class Bairro implements Serializable {
 
     @Id

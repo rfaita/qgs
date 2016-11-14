@@ -8,6 +8,11 @@ import javax.persistence.*;
  * @author rafael
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Logradouro.findAll", query = "SELECT o FROM Logradouro o")
+    ,
+    @NamedQuery(name = "Logradouro.findAllByParam", query = "SELECT o FROM Logradouro o JOIN FETCH o.bairro WHERE o.bairro.id = :idBairro")
+})
 public class Logradouro implements Serializable {
 
     @Id

@@ -52,15 +52,6 @@ public class MaterialService {
         return helper.getEntityManager().find(Material.class, id);
     }
 
-    public void inactivate(Material o) throws Exception {
-
-        Material in = findById(o.getId());
-        in.setAtivo(Boolean.FALSE);
-
-        helper.getEntityManager().merge(in);
-
-    }
-
     public List<Material> findAllByMaterial(Material o) {
         StringBuilder hql = new StringBuilder("SELECT o FROM Material o ");
         hql.append("JOIN FETCH o.empresa ");

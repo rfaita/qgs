@@ -2,8 +2,8 @@ package com.qgs.ui.window.cadastro;
 
 import com.qgs.model.cadastro.Material;
 import com.qgs.model.cadastro.TipoMaterial;
+import com.qgs.service.ListAllService;
 import com.qgs.service.cadastro.MaterialService;
-import com.qgs.service.cadastro.TipoMaterialService;
 import com.qgs.ui.QGSUI;
 import com.qgs.ui.view.cadastro.MaterialView;
 import com.qgs.ui.window.base.BaseWindow;
@@ -30,7 +30,7 @@ public class MaterialWindow extends BaseWindow<Integer, Material> {
     @EJB
     private MaterialService matService;
     @EJB
-    private TipoMaterialService tipoMaterialService;
+    private ListAllService listAllService;
 
     public MaterialWindow() {
         super("materialwindow", "Gestão de Material");
@@ -95,7 +95,7 @@ public class MaterialWindow extends BaseWindow<Integer, Material> {
 
     private ComboBox getCmbTipoMaterial() {
         if (cmbTipoMaterial == null) {
-            cmbTipoMaterial = new ComboBox("Tipo sorteio");
+            cmbTipoMaterial = new ComboBox("Tipo material");
             cmbTipoMaterial.setInputPrompt("Informe o tipo...");
             cmbTipoMaterial.setContainerDataSource(getBcTipoMaterial());
             cmbTipoMaterial.setWidth(100, Unit.PERCENTAGE);
@@ -144,7 +144,7 @@ public class MaterialWindow extends BaseWindow<Integer, Material> {
 
     @Override
     protected void doInitiate() {
-        getBcTipoMaterial().addAll(tipoMaterialService.findAll());
+        getBcTipoMaterial().addAll(listAllService.findAll(TipoMaterial.class));
     }
 
     @Override

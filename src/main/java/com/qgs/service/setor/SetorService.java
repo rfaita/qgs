@@ -1,6 +1,7 @@
-package com.qgs.service.cadastro;
+package com.qgs.service.setor;
 
 import com.qgs.model.cadastro.Atributo;
+import com.qgs.model.cadastro.setor.Setor;
 import com.qgs.service.secutiry.SecurityUtils;
 import com.qgs.util.PersistenceUnitHelper;
 import java.util.HashSet;
@@ -19,7 +20,7 @@ import javax.validation.Validator;
  * @author rafael
  */
 @Stateless
-public class AtributoService {
+public class SetorService {
 
     @Inject
     private Validator validator;
@@ -28,14 +29,14 @@ public class AtributoService {
     @EJB
     private SecurityUtils securityUtils;
 
-    private void validateSave(Atributo o) throws ConstraintViolationException {
-        Set<ConstraintViolation<Atributo>> violations = validator.validate(o, Atributo.SaveGroup.class);
+    private void validateSave(Setor o) throws ConstraintViolationException {
+        Set<ConstraintViolation<Setor>> violations = validator.validate(o, Setor.SaveGroup.class);
         if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(new HashSet<ConstraintViolation<Atributo>>(violations));
+            throw new ConstraintViolationException(new HashSet<ConstraintViolation<Setor>>(violations));
         }
     }
 
-    public void save(Atributo o) throws Exception {
+    public void save(Setor o) throws Exception {
 
         validateSave(o);
 
@@ -47,23 +48,23 @@ public class AtributoService {
         }
     }
 
-    public Atributo findCompleteById(Integer id) {
-        Atributo ret = findById(id);
-        ret.getValoresAtributo().size();
+    public Setor findCompleteById(Integer id) {
+        Setor ret = findById(id);
+        ret.getCriterios().size();
         return ret;
     }
-    public Atributo findById(Integer id) {
-        return helper.getEntityManager().find(Atributo.class, id);
+
+    public Setor findById(Integer id) {
+        return helper.getEntityManager().find(Setor.class, id);
     }
 
-    public List<Atributo> findAllByAtributo(Atributo o) {
-        StringBuilder hql = new StringBuilder("SELECT o FROM Atributo o ");
+    public List<Setor> findAllBySetor(Setor o) {
+        StringBuilder hql = new StringBuilder("SELECT o FROM Setor o ");
         hql.append("JOIN FETCH o.empresa ");
-        hql.append("JOIN FETCH o.tipoAtributo ");
         hql.append("WHERE o.empresa.id = :idEmpresa ");
 
-        if (o.getAtributo() != null && !o.getAtributo().isEmpty()) {
-            hql.append("AND upper(o.atributo) LIKE :atributo ");
+        if (o.getSetor() != null && !o.getSetor().isEmpty()) {
+            hql.append("AND upper(o.setor) LIKE :setor ");
         }
 
         hql.append("AND (coalesce(o.ativo, false) = true ");
@@ -80,8 +81,8 @@ public class AtributoService {
             q.setParameter("idEmpresa", securityUtils.getEmpresa().getId());
         }
 
-        if (o.getAtributo() != null && !o.getAtributo().isEmpty()) {
-            q.setParameter("atributo", "%" + o.getAtributo().toUpperCase() + "%");
+        if (o.getSetor() != null && !o.getSetor().isEmpty()) {
+            q.setParameter("setor", "%" + o.getSetor().toUpperCase() + "%");
         }
 
         return q.getResultList();

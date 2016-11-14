@@ -4,8 +4,8 @@ import com.qgs.enums.TipoDadoAtributoEnum;
 import com.qgs.model.cadastro.Atributo;
 import com.qgs.model.cadastro.TipoAtributo;
 import com.qgs.model.cadastro.ValorAtributo;
+import com.qgs.service.ListAllService;
 import com.qgs.service.cadastro.AtributoService;
-import com.qgs.service.cadastro.TipoAtributoService;
 import com.qgs.ui.QGSUI;
 import com.qgs.ui.view.cadastro.AtributoView;
 import com.qgs.ui.window.base.BaseWindow;
@@ -42,7 +42,7 @@ public class AtributoWindow extends BaseWindow<Integer, Atributo> {
     @EJB
     private AtributoService atrService;
     @EJB
-    private TipoAtributoService tipoAtributoService;
+    private ListAllService listAllService;
 
     public AtributoWindow() {
         super("atributowindow", "Gestão de Atributo");
@@ -120,7 +120,7 @@ public class AtributoWindow extends BaseWindow<Integer, Atributo> {
             btAdd.setIcon(FontAwesome.PLUS);
             btAdd.setEnabled(Boolean.FALSE);
             btAdd.addClickListener((Button.ClickEvent event) -> {
-                if (getTxtValorAtributo() == null || getTxtValorAtributo().isEmpty()) {
+                if (getTxtValorAtributo().getValue() == null || getTxtValorAtributo().getValue().isEmpty()) {
                     QGSUI.showWarn("Informe o valor do atributo.");
                     return;
                 }
@@ -262,7 +262,7 @@ public class AtributoWindow extends BaseWindow<Integer, Atributo> {
 
     @Override
     protected void doInitiate() {
-        getBcTipoAtributo().addAll(tipoAtributoService.findAll());
+        getBcTipoAtributo().addAll(listAllService.findAll(TipoAtributo.class));
     }
 
     @Override

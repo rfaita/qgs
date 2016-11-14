@@ -6,6 +6,7 @@ import com.qgs.service.secutiry.SecurityUtils;
 import com.qgs.ui.view.cadastro.AtributoView;
 import com.qgs.ui.view.cadastro.EPIView;
 import com.qgs.ui.view.cadastro.MaterialView;
+import com.qgs.ui.view.cadastro.depto.TipoDepartamentoView;
 import com.qgs.ui.view.setor.SetorView;
 import com.qgs.ui.window.UsuarioProvedorWindow;
 import com.qgs.util.security.QGSEmpresaPrincipal;
@@ -135,6 +136,7 @@ public class QGSMenu extends CustomComponent {
             items.put(MaterialView.VIEW_ID, new ItemMenu("Material", FontAwesome.DIAMOND, SecurityRole.USER));
             items.put(AtributoView.VIEW_ID, new ItemMenu("Atributo", FontAwesome.DIAMOND, SecurityRole.USER));
             items.put(SetorView.VIEW_ID, new ItemMenu("Setor", FontAwesome.DIAMOND, SecurityRole.USER));
+            items.put(TipoDepartamentoView.VIEW_ID, new ItemMenu("Tipo departamento", FontAwesome.DIAMOND, SecurityRole.USER));
         }
         return items;
     }

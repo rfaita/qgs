@@ -6,5 +6,15 @@ package com.qgs.enums;
  */
 public enum CriterioSelecaoSetorEnum {
 
-    BAIRRO, CIDADE, LOGRADOURO, ESTADO, PAIS;
+    LOGRADOURO("Logradouro"), BAIRRO("Bairro"), CIDADE("Cidade"), ESTADO("Estado"), PAIS("País");
+    private final String criterio;
+
+    public String getCriterio() {
+        return criterio;
+    }
+
+    private CriterioSelecaoSetorEnum(String criterio) {
+        this.criterio = criterio;
+    }
+
 }

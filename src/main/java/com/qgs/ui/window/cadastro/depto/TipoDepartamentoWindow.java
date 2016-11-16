@@ -1,6 +1,6 @@
 package com.qgs.ui.window.cadastro.depto;
 
-import com.qgs.enums.CriterioSelecaoSetorEnum;
+import com.qgs.enums.CriterioSelecaoLocalidadeEnum;
 import com.qgs.model.cadastro.depto.TipoDepartamento;
 import com.qgs.model.cadastro.servico.TipoServico;
 import com.qgs.service.ListAllService;
@@ -26,7 +26,7 @@ public class TipoDepartamentoWindow extends BaseWindow<Integer, TipoDepartamento
     private TextField txtTipoDepartamento;
     private BeanContainer<Integer, TipoServico> bcTipoServico;
     private ComboBox cmbTipoServico;
-    private BeanContainer<CriterioSelecaoSetorEnum, CriterioSelecaoSetorEnum> bcCriterioSelecaoSetor;
+    private BeanContainer<CriterioSelecaoLocalidadeEnum, CriterioSelecaoLocalidadeEnum> bcCriterioSelecaoSetor;
     private ComboBox cmbCriterioSelecaoSetor;
     private CheckBox ckAtivo;
 
@@ -112,10 +112,10 @@ public class TipoDepartamentoWindow extends BaseWindow<Integer, TipoDepartamento
         return cmbTipoServico;
     }
 
-    private BeanContainer<CriterioSelecaoSetorEnum, CriterioSelecaoSetorEnum> getBcCriterioSelecaoSetor() {
+    private BeanContainer<CriterioSelecaoLocalidadeEnum, CriterioSelecaoLocalidadeEnum> getBcCriterioSelecaoSetor() {
         if (bcCriterioSelecaoSetor == null) {
-            bcCriterioSelecaoSetor = new BeanContainer<CriterioSelecaoSetorEnum, CriterioSelecaoSetorEnum>(CriterioSelecaoSetorEnum.class);
-            bcCriterioSelecaoSetor.setBeanIdResolver((CriterioSelecaoSetorEnum bean) -> bean);
+            bcCriterioSelecaoSetor = new BeanContainer<CriterioSelecaoLocalidadeEnum, CriterioSelecaoLocalidadeEnum>(CriterioSelecaoLocalidadeEnum.class);
+            bcCriterioSelecaoSetor.setBeanIdResolver((CriterioSelecaoLocalidadeEnum bean) -> bean);
         }
         return bcCriterioSelecaoSetor;
     }
@@ -169,7 +169,7 @@ public class TipoDepartamentoWindow extends BaseWindow<Integer, TipoDepartamento
     @Override
     protected void doInitiate() {
         getBcTipoServico().addAll(listAllService.findAll(TipoServico.class));
-        getBcCriterioSelecaoSetor().addAll(Arrays.asList(CriterioSelecaoSetorEnum.values()));
+        getBcCriterioSelecaoSetor().addAll(Arrays.asList(CriterioSelecaoLocalidadeEnum.values()));
     }
 
     @Override

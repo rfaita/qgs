@@ -1,7 +1,7 @@
 package com.qgs.model.cadastro.depto;
 
 import com.qgs.model.cadastro.servico.TipoServico;
-import com.qgs.enums.CriterioSelecaoSetorEnum;
+import com.qgs.enums.CriterioSelecaoLocalidadeEnum;
 import com.qgs.model.BaseBean;
 import com.qgs.model.Empresa;
 import javax.persistence.*;
@@ -27,7 +27,7 @@ public class TipoDepartamento extends BaseBean<Integer> {
     @Size(min = 1, max = 50, message = "O tipo de departamento deve estar preenchido e possuir no máximo 50 caractéres.", groups = SaveGroup.class)
     private String tipoDepartamento;
     @NotNull(message = "O critério de seleção de setor é obrigatório.", groups = SaveGroup.class)
-    private CriterioSelecaoSetorEnum criterioSelecaoSetor;
+    private CriterioSelecaoLocalidadeEnum criterioSelecaoSetor;
     @ManyToOne
     @JoinColumn(name = "idtiposervicoatendido")
     @NotNull(message = "O tipo de serviço atendido é obrigatório.", groups = SaveGroup.class)
@@ -53,11 +53,11 @@ public class TipoDepartamento extends BaseBean<Integer> {
         this.empresa = empresa;
     }
 
-    public CriterioSelecaoSetorEnum getCriterioSelecaoSetor() {
+    public CriterioSelecaoLocalidadeEnum getCriterioSelecaoSetor() {
         return criterioSelecaoSetor;
     }
 
-    public void setCriterioSelecaoSetor(CriterioSelecaoSetorEnum criterioSelecaoSetor) {
+    public void setCriterioSelecaoSetor(CriterioSelecaoLocalidadeEnum criterioSelecaoSetor) {
         this.criterioSelecaoSetor = criterioSelecaoSetor;
     }
 

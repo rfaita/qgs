@@ -1,6 +1,5 @@
 package com.qgs.service.cadastro.servico;
 
-import com.qgs.model.cadastro.Atributo;
 import com.qgs.model.cadastro.servico.Servico;
 import com.qgs.service.secutiry.SecurityUtils;
 import com.qgs.util.PersistenceUnitHelper;

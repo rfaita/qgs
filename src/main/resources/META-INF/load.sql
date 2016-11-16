@@ -43,6 +43,7 @@ insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo)
 insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (2, 'teste2', true, 1, 1,2);
 insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (3, 'teste3', true, 1, 1,3);
 insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (4, 'teste4', true, 1, 1,4);
+insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (5, 'teste5', true, 1, 2,4);
 
 insert into pais(id, pais, abrev) values (1, 'Brasil', 'BR');
 

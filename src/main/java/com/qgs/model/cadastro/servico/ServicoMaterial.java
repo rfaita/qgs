@@ -19,7 +19,7 @@ public class ServicoMaterial implements Serializable {
     @Id
     @SequenceGenerator(name = "seqServicoMaterial", sequenceName = "seqServicoMaterial", initialValue = 1000, allocationSize = 100)
     @GeneratedValue(generator = "seqServicoMaterial")
-    private Integer id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "idservico")
     private Servico servico;
@@ -28,11 +28,11 @@ public class ServicoMaterial implements Serializable {
     private Material material;
     private Integer qtd;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

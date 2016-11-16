@@ -1,10 +1,14 @@
 package com.qgs.ui.window.cadastro.servico;
 
+import com.qgs.enums.CriterioSelecaoLocalidadeEnum;
 import com.qgs.model.cadastro.Atributo;
 import com.qgs.model.cadastro.EPI;
+import com.qgs.model.cadastro.Material;
 import com.qgs.model.cadastro.Prioridade;
 import com.qgs.model.cadastro.servico.Servico;
+import com.qgs.model.cadastro.servico.ServicoAssociado;
 import com.qgs.model.cadastro.servico.ServicoAtributo;
+import com.qgs.model.cadastro.servico.ServicoMaterial;
 import com.qgs.model.cadastro.servico.TipoServico;
 import com.qgs.service.ListAllService;
 import com.qgs.service.cadastro.servico.ServicoService;
@@ -64,6 +68,25 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
     private Table tbServicoAtributo;
     private Long indexServicoAtributo = -1L;
 
+    private BeanContainer<Integer, Material> bcMaterial;
+    private ComboBox cmbMaterial;
+    private TextField txtQtdMaterial;
+    private Button btAddMaterial;
+    private Button btDelMaterial;
+    private BeanContainer<Long, ServicoMaterial> bcServicoMaterial;
+    private Table tbServicoMaterial;
+    private Long indexServicoMaterial = -1L;
+
+    private BeanContainer<Long, Servico> bcServico;
+    private ComboBox cmbServico;
+    private BeanContainer<String, CriterioSelecaoLocalidadeEnum> bcCriterioSelecaoLocalidade;
+    private ComboBox cmbCriterioSelecaoLocalidade;
+    private Button btAddServicoAssociado;
+    private Button btDelServicoAssociado;
+    private BeanContainer<Long, ServicoAssociado> bcServicoAssociado;
+    private Table tbServicoAssociado;
+    private Long indexServicoAssociado = -1L;
+
     @EJB
     private ServicoService servicoService;
     @EJB
@@ -103,6 +126,8 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         tabSheet.addTab(content, "Dados básicos");
         tabSheet.addTab(getAbaEPI(), "EPI");
         tabSheet.addTab(getAbaAtributo(), "Atributos");
+        tabSheet.addTab(getAbaMaterial(), "Materiais");
+        tabSheet.addTab(getAbaAssociado(), "Serviços Associados");
 
         VerticalLayout vl = new VerticalLayout(tabSheet, getBtSave());
 
@@ -145,6 +170,41 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
 
         content.addComponent(h);
         content.addComponent(getTbServicoAtributo());
+
+        return content;
+    }
+
+    private FormLayout getAbaMaterial() {
+        FormLayout content = new FormLayout();
+        content.setSizeFull();
+        content.setMargin(new MarginInfo(true));
+        content.setSpacing(true);
+
+        content.addComponent(getCmbMaterial());
+        content.addComponent(getTxtQtdMaterial());
+
+        HorizontalLayout h = new HorizontalLayout(getBtAddMaterial(), getBtDelMaterial());
+        h.setWidth(100, Unit.PERCENTAGE);
+
+        content.addComponent(h);
+        content.addComponent(getTbServicoMaterial());
+
+        return content;
+    }
+    private FormLayout getAbaAssociado() {
+        FormLayout content = new FormLayout();
+        content.setSizeFull();
+        content.setMargin(new MarginInfo(true));
+        content.setSpacing(true);
+
+        content.addComponent(getCmbServico());
+        content.addComponent(getCmbCriterioSelecaoLocalidade());
+
+        HorizontalLayout h = new HorizontalLayout(getBtAddServicoAssociado(), getBtDelServicoAssociado());
+        h.setWidth(100, Unit.PERCENTAGE);
+
+        content.addComponent(h);
+        content.addComponent(getTbServicoAssociado());
 
         return content;
     }
@@ -302,7 +362,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
 
     private Button getBtAddEPI() {
         if (btAddEPI == null) {
-            btAddEPI = new Button("Adicionar EPI");
+            btAddEPI = new Button("Adicionar");
             btAddEPI.setIcon(FontAwesome.PLUS);
             btAddEPI.addClickListener((Button.ClickEvent event) -> {
                 if (getCmbEPI().getValue() == null) {
@@ -319,7 +379,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
 
     private Button getBtDelEPI() {
         if (btDelEPI == null) {
-            btDelEPI = new Button("Remover EPI");
+            btDelEPI = new Button("Remover");
             btDelEPI.setIcon(FontAwesome.MINUS);
             btDelEPI.addClickListener((Button.ClickEvent event) -> {
                 if (getTbEPIServico().getValue() != null) {
@@ -389,7 +449,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
 
     private Button getBtAddAtributo() {
         if (btAddAtributo == null) {
-            btAddAtributo = new Button("Adicionar Atributo");
+            btAddAtributo = new Button("Adicionar");
             btAddAtributo.setIcon(FontAwesome.PLUS);
             btAddAtributo.addClickListener((Button.ClickEvent event) -> {
                 if (getCmbAtributo().getValue() == null) {
@@ -411,7 +471,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
 
     private Button getBtDelAtributo() {
         if (btDelAtributo == null) {
-            btDelAtributo = new Button("Remover atributo");
+            btDelAtributo = new Button("Remover");
             btDelAtributo.setIcon(FontAwesome.MINUS);
             btDelAtributo.addClickListener((Button.ClickEvent event) -> {
                 if (getTbServicoAtributo().getValue() != null) {
@@ -492,6 +552,252 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         }
 
         return tbServicoAtributo;
+    }
+
+    private Button getBtAddMaterial() {
+        if (btAddMaterial == null) {
+            btAddMaterial = new Button("Adicionar");
+            btAddMaterial.setIcon(FontAwesome.PLUS);
+            btAddMaterial.addClickListener((Button.ClickEvent event) -> {
+                if (getCmbMaterial().getValue() == null) {
+                    QGSUI.showWarn("Informe o material.");
+                    return;
+                }
+                if (getTxtQtdMaterial().getValue() == null || getTxtQtdMaterial().getValue().isEmpty()) {
+                    QGSUI.showWarn("Informe a quantidade do material.");
+                    return;
+                }
+                try {
+                    getTxtQtdMaterial().validate();
+                } catch (Validator.InvalidValueException ex) {
+                    QGSUI.doCatch(ex);
+                    return;
+                }
+
+                ServicoMaterial sa = new ServicoMaterial();
+                sa.setMaterial(getBcMaterial().getItem(getCmbMaterial().getValue()).getBean());
+                sa.setQtd(Validation.validInteger(getTxtQtdMaterial().getValue()));
+                sa.setId(indexServicoMaterial--);
+                getBcServicoMaterial().addBean(sa);
+                getCmbMaterial().setValue(null);
+                getTxtQtdMaterial().setValue("");
+
+            });
+        }
+        return btAddMaterial;
+    }
+
+    private Button getBtDelMaterial() {
+        if (btDelMaterial == null) {
+            btDelMaterial = new Button("Remover");
+            btDelMaterial.setIcon(FontAwesome.MINUS);
+            btDelMaterial.addClickListener((Button.ClickEvent event) -> {
+                if (getTbServicoMaterial().getValue() != null) {
+                    ServicoMaterial o = getBcServicoMaterial().getItem(getTbServicoMaterial().getValue()).getBean();
+                    getBcServicoMaterial().removeItem(o.getId());
+                } else {
+                    QGSUI.showWarn("Selecione o que deseja remover.");
+                }
+
+            });
+        }
+        return btDelMaterial;
+    }
+
+    private BeanContainer<Long, ServicoMaterial> getBcServicoMaterial() {
+        if (bcServicoMaterial == null) {
+            bcServicoMaterial = new BeanContainer<Long, ServicoMaterial>(ServicoMaterial.class);
+            bcServicoMaterial.setBeanIdResolver((ServicoMaterial bean) -> bean.getId());
+        }
+        return bcServicoMaterial;
+    }
+
+    private BeanContainer<Integer, Material> getBcMaterial() {
+        if (bcMaterial == null) {
+            bcMaterial = new BeanContainer<Integer, Material>(Material.class);
+            bcMaterial.setBeanIdResolver((Material bean) -> bean.getId());
+        }
+        return bcMaterial;
+    }
+
+    private ComboBox getCmbMaterial() {
+        if (cmbMaterial == null) {
+            cmbMaterial = new ComboBox("Material");
+            cmbMaterial.setInputPrompt("Informe o material...");
+            cmbMaterial.setContainerDataSource(getBcMaterial());
+            cmbMaterial.setWidth(100, Unit.PERCENTAGE);
+            cmbMaterial.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
+            cmbMaterial.setItemCaptionPropertyId("material");
+            cmbMaterial.setImmediate(true);
+        }
+        return cmbMaterial;
+    }
+
+    private TextField getTxtQtdMaterial() {
+        if (txtQtdMaterial == null) {
+            txtQtdMaterial = new TextField("Qtd.");
+            txtQtdMaterial.setWidth(100, Unit.PERCENTAGE);
+            txtQtdMaterial.addValidator(new RegexpValidator("[1-9]{1}[0-9]*", "Qtd. Material deve ser um número inteiro e positivo."));
+        }
+        return txtQtdMaterial;
+    }
+
+    private Table getTbServicoMaterial() {
+        if (tbServicoMaterial == null) {
+            tbServicoMaterial = new Table();
+            tbServicoMaterial.setWidth(100, Unit.PERCENTAGE);
+            tbServicoMaterial.setHeight(300, Unit.PIXELS);
+            tbServicoMaterial.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
+            tbServicoMaterial.addStyleName(ValoTheme.TABLE_COMPACT);
+            tbServicoMaterial.setSelectable(true);
+
+            tbServicoMaterial.setColumnCollapsingAllowed(true);
+            tbServicoMaterial.setColumnReorderingAllowed(true);
+            tbServicoMaterial.setContainerDataSource(getBcServicoMaterial());
+            tbServicoMaterial.setSortAscending(false);
+
+            tbServicoMaterial.addGeneratedColumn("material", (Table source, Object itemId, Object columnId) -> {
+                Property<Material> prop = source.getItem(itemId).getItemProperty(columnId);
+                if (prop.getType().equals(Material.class)) {
+                    return prop.getValue().getMaterial();
+                }
+                return "";
+            });
+
+            tbServicoMaterial.setVisibleColumns("material", "qtd");
+            tbServicoMaterial.setColumnExpandRatio("material", 1);
+            tbServicoMaterial.setColumnHeaders("Material", "Quantidade");
+
+            tbServicoMaterial.setImmediate(true);
+        }
+
+        return tbServicoMaterial;
+    }
+
+    private Button getBtAddServicoAssociado() {
+        if (btAddServicoAssociado == null) {
+            btAddServicoAssociado = new Button("Adicionar");
+            btAddServicoAssociado.setIcon(FontAwesome.PLUS);
+            btAddServicoAssociado.addClickListener((Button.ClickEvent event) -> {
+                if (getCmbServico().getValue() == null) {
+                    QGSUI.showWarn("Informe o serviço.");
+                    return;
+                }
+                if (getCmbCriterioSelecaoLocalidade().getValue() == null) {
+                    QGSUI.showWarn("Informe o critério de localidade.");
+                    return;
+                }
+
+                ServicoAssociado sa = new ServicoAssociado();
+                sa.setServicoAssociado(getBcServico().getItem(getCmbServico().getValue()).getBean());
+                sa.setCriterioSelecaoLocalidade(getBcCriterioSelecaoLocalidade().getItem(getCmbCriterioSelecaoLocalidade().getValue()).getBean());
+                sa.setId(indexServicoAssociado--);
+                getBcServicoAssociado().addBean(sa);
+                getCmbServico().setValue(null);
+                getCmbCriterioSelecaoLocalidade().setValue(null);
+
+            });
+        }
+        return btAddServicoAssociado;
+    }
+
+    private Button getBtDelServicoAssociado() {
+        if (btDelServicoAssociado == null) {
+            btDelServicoAssociado = new Button("Remover");
+            btDelServicoAssociado.setIcon(FontAwesome.MINUS);
+            btDelServicoAssociado.addClickListener((Button.ClickEvent event) -> {
+                if (getTbServicoAssociado().getValue() != null) {
+                    ServicoAssociado o = getBcServicoAssociado().getItem(getTbServicoAssociado().getValue()).getBean();
+                    getBcServicoAssociado().removeItem(o.getId());
+                } else {
+                    QGSUI.showWarn("Selecione o que deseja remover.");
+                }
+
+            });
+        }
+        return btDelServicoAssociado;
+    }
+
+    private BeanContainer<Long, ServicoAssociado> getBcServicoAssociado() {
+        if (bcServicoAssociado == null) {
+            bcServicoAssociado = new BeanContainer<Long, ServicoAssociado>(ServicoAssociado.class);
+            bcServicoAssociado.setBeanIdResolver((ServicoAssociado bean) -> bean.getId());
+        }
+        return bcServicoAssociado;
+    }
+
+    private BeanContainer<Long, Servico> getBcServico() {
+        if (bcServico == null) {
+            bcServico = new BeanContainer<Long, Servico>(Servico.class);
+            bcServico.setBeanIdResolver((Servico bean) -> bean.getId());
+        }
+        return bcServico;
+    }
+
+    private BeanContainer<String, CriterioSelecaoLocalidadeEnum> getBcCriterioSelecaoLocalidade() {
+        if (bcCriterioSelecaoLocalidade == null) {
+            bcCriterioSelecaoLocalidade = new BeanContainer<String, CriterioSelecaoLocalidadeEnum>(CriterioSelecaoLocalidadeEnum.class);
+            bcCriterioSelecaoLocalidade.setBeanIdResolver((CriterioSelecaoLocalidadeEnum bean) -> bean.getCriterio());
+        }
+        return bcCriterioSelecaoLocalidade;
+    }
+
+    private ComboBox getCmbServico() {
+        if (cmbServico == null) {
+            cmbServico = new ComboBox("Serviço");
+            cmbServico.setInputPrompt("Informe o serviço...");
+            cmbServico.setContainerDataSource(getBcServicoAssociado());
+            cmbServico.setWidth(100, Unit.PERCENTAGE);
+            cmbServico.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
+            cmbServico.setItemCaptionPropertyId("servico");
+            cmbServico.setImmediate(true);
+        }
+        return cmbServico;
+    }
+
+    private ComboBox getCmbCriterioSelecaoLocalidade() {
+        if (cmbCriterioSelecaoLocalidade == null) {
+            cmbCriterioSelecaoLocalidade = new ComboBox("Critério Localidade");
+            cmbCriterioSelecaoLocalidade.setInputPrompt("Informe o critério...");
+            cmbCriterioSelecaoLocalidade.setContainerDataSource(getBcServicoAssociado());
+            cmbCriterioSelecaoLocalidade.setWidth(100, Unit.PERCENTAGE);
+            cmbCriterioSelecaoLocalidade.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
+            cmbCriterioSelecaoLocalidade.setItemCaptionPropertyId("criterio");
+            cmbCriterioSelecaoLocalidade.setImmediate(true);
+        }
+        return cmbCriterioSelecaoLocalidade;
+    }
+
+    private Table getTbServicoAssociado() {
+        if (tbServicoAssociado == null) {
+            tbServicoAssociado = new Table();
+            tbServicoAssociado.setWidth(100, Unit.PERCENTAGE);
+            tbServicoAssociado.setHeight(300, Unit.PIXELS);
+            tbServicoAssociado.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
+            tbServicoAssociado.addStyleName(ValoTheme.TABLE_COMPACT);
+            tbServicoAssociado.setSelectable(true);
+
+            tbServicoAssociado.setColumnCollapsingAllowed(true);
+            tbServicoAssociado.setColumnReorderingAllowed(true);
+            tbServicoAssociado.setContainerDataSource(getBcServicoAssociado());
+            tbServicoAssociado.setSortAscending(false);
+
+            tbServicoAssociado.addGeneratedColumn("criterioSelecaoLocalidade", (Table source, Object itemId, Object columnId) -> {
+                Property<CriterioSelecaoLocalidadeEnum> prop = source.getItem(itemId).getItemProperty(columnId);
+                if (prop.getType().equals(CriterioSelecaoLocalidadeEnum.class)) {
+                    return prop.getValue().getCriterio();
+                }
+                return "";
+            });
+
+            tbServicoAssociado.setVisibleColumns("servico", "criterioSelecaoLocalidade");
+            tbServicoAssociado.setColumnExpandRatio("servico", 1);
+            tbServicoAssociado.setColumnHeaders("Serviço", "Critério de Localidade");
+
+            tbServicoAssociado.setImmediate(true);
+        }
+
+        return tbServicoAssociado;
     }
 
     @Override

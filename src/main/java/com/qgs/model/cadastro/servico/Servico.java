@@ -65,6 +65,8 @@ public class Servico extends BaseBean<Long> {
             inverseJoinColumns = {
                 @JoinColumn(name = "idepi")})
     private List<EPI> epis;
+    @OneToMany(targetEntity = ServicoAssociado.class, mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServicoAssociado> associados;
     @OneToMany(targetEntity = ServicoMaterial.class, mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServicoMaterial> materiais;
     @OneToMany(targetEntity = ServicoCusto.class, mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -78,6 +80,14 @@ public class Servico extends BaseBean<Long> {
     @ManyToOne
     @JoinColumn(name = "idempresa")
     private Empresa empresa;
+
+    public List<ServicoAssociado> getAssociados() {
+        return associados;
+    }
+
+    public void setAssociados(List<ServicoAssociado> associados) {
+        this.associados = associados;
+    }
 
     @Override
     public Long getId() {

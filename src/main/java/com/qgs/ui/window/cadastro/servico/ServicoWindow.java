@@ -446,7 +446,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         if (cmbAtributo == null) {
             cmbAtributo = new ComboBox("Atributo");
             cmbAtributo.setInputPrompt("Informe o atributo...");
-            cmbAtributo.setContainerDataSource(getBcEPI());
+            cmbAtributo.setContainerDataSource(getBcAtributo());
             cmbAtributo.setWidth(100, Unit.PERCENTAGE);
             cmbAtributo.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
             cmbAtributo.setItemCaptionPropertyId("atributo");

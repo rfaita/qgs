@@ -8,6 +8,8 @@ import com.qgs.ui.view.cadastro.EPIView;
 import com.qgs.ui.view.cadastro.MaterialView;
 import com.qgs.ui.view.cadastro.depto.DepartamentoView;
 import com.qgs.ui.view.cadastro.depto.TipoDepartamentoView;
+import com.qgs.ui.view.cadastro.rubrica.RubricaView;
+import com.qgs.ui.view.cadastro.servico.ServicoView;
 import com.qgs.ui.view.setor.SetorView;
 import com.qgs.ui.window.UsuarioProvedorWindow;
 import com.qgs.util.security.QGSEmpresaPrincipal;
@@ -139,6 +141,8 @@ public class QGSMenu extends CustomComponent {
             items.put(SetorView.VIEW_ID, new ItemMenu("Setor", FontAwesome.DIAMOND, SecurityRole.USER));
             items.put(TipoDepartamentoView.VIEW_ID, new ItemMenu("Tipo departamento", FontAwesome.DIAMOND, SecurityRole.USER));
             items.put(DepartamentoView.VIEW_ID, new ItemMenu("Departamento", FontAwesome.DIAMOND, SecurityRole.USER));
+            items.put(RubricaView.VIEW_ID, new ItemMenu("Rubrica", FontAwesome.DIAMOND, SecurityRole.USER));
+            items.put(ServicoView.VIEW_ID, new ItemMenu("Serviços", FontAwesome.OPENCART, SecurityRole.USER));
         }
         return items;
     }

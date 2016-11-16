@@ -8,6 +8,9 @@ import javax.persistence.*;
  * @author rafael
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Prioridade.findAll", query = "SELECT o FROM Prioridade o")
+})
 public class Prioridade implements Serializable {
 
     @Id

@@ -30,18 +30,19 @@ public class EPIWindow extends BaseWindow<Integer, EPI> {
 
         FormLayout content = new FormLayout();
         content.setSizeFull();
-        content.setMargin(new MarginInfo(true));
         content.setSpacing(true);
 
         content.addComponent(getTxtId());
         content.addComponent(getTxtEPI());
         content.addComponent(getTxtDescricao());
         content.addComponent(getCkAtivo());
-        content.addComponent(getBtSave());
-        content.setComponentAlignment(getBtSave(), Alignment.BOTTOM_RIGHT);
 
-        setContent(content);
+        VerticalLayout vl = new VerticalLayout(content, getBtSave());
 
+        vl.setComponentAlignment(getBtSave(), Alignment.BOTTOM_RIGHT);
+        vl.setMargin(new MarginInfo(true));
+
+        setContent(vl);
     }
 
     @Override

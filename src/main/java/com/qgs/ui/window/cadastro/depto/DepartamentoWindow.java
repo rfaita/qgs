@@ -39,18 +39,19 @@ public class DepartamentoWindow extends BaseWindow<Integer, Departamento> {
 
         FormLayout content = new FormLayout();
         content.setSizeFull();
-        content.setMargin(new MarginInfo(true));
         content.setSpacing(true);
 
         content.addComponent(getTxtId());
         content.addComponent(getTxtDepartamento());
         content.addComponent(getCmbTipoDepartamento());
         content.addComponent(getCkAtivo());
-        content.addComponent(getBtSave());
-        content.setComponentAlignment(getBtSave(), Alignment.BOTTOM_RIGHT);
 
-        setContent(content);
+        VerticalLayout vl = new VerticalLayout(content, getBtSave());
 
+        vl.setComponentAlignment(getBtSave(), Alignment.BOTTOM_RIGHT);
+        vl.setMargin(new MarginInfo(true));
+
+        setContent(vl);
     }
 
     @Override

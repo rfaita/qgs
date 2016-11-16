@@ -27,5 +27,5 @@ $valo-menu-background-color: #414B56;
     @include views;
     @include dashboard-login-view;
     @include dashboard-common;
-    @incluse dashboard-dashboard-view;
+    @include dashboard-dashboard-view;
 }

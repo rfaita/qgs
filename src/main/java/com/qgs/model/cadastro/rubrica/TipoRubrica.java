@@ -4,6 +4,8 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -11,6 +13,9 @@ import javax.persistence.SequenceGenerator;
  * @author rafael
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "TipoRubrica.findAll", query = "SELECT o FROM TipoRubrica o")
+})
 public class TipoRubrica implements Serializable {
 
     @Id

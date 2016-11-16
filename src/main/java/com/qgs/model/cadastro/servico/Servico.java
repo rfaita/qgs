@@ -1,35 +1,51 @@
 package com.qgs.model.cadastro.servico;
 
+import com.qgs.model.BaseBean;
+import com.qgs.model.Empresa;
 import com.qgs.model.cadastro.Atributo;
 import com.qgs.model.cadastro.EPI;
 import com.qgs.model.cadastro.Material;
 import com.qgs.model.cadastro.Prioridade;
 import com.qgs.model.cadastro.rubrica.CentroCusto;
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.validation.groups.Default;
 
 /**
  *
  * @author rafael
  */
 @Entity
-public class Servico implements Serializable {
+public class Servico extends BaseBean<Long> {
 
     @Id
     @SequenceGenerator(name = "seqservico", sequenceName = "seqservico", initialValue = 1000, allocationSize = 100)
     @GeneratedValue(generator = "seqservico")
-    private Integer id;
+    private Long id;
+    @NotNull(message = "Serviço é obrigatório.", groups = SaveGroup.class)
+    @Size(min = 1, max = 100, message = "O serviço deve estar preenchido e possuir no máximo 100 caractéres.", groups = SaveGroup.class)
     private String servico;
+    private String descricao;
+    private String procedimento;
     @ManyToOne
     @JoinColumn(name = "idgruposervico")
     private GrupoServico grupoServico;
+    @NotNull(message = "Prazo(Horas) é obrigatório.", groups = SaveGroup.class)
+    @Min(value = 1, message = "Prazo(Horas) deve ser maior que zero.", groups = SaveGroup.class)
     private Integer prazoHoras;
+    @NotNull(message = "Prazo cliente(Horas) é obrigatório.", groups = SaveGroup.class)
+    @Min(value = 1, message = "Prazo cliente(Horas) deve ser maior que zero.", groups = SaveGroup.class)
     private Integer prazoClienteHoras;
+    @NotNull(message = "Prazo alerta(Horas) é obrigatório.", groups = SaveGroup.class)
+    @Min(value = 1, message = "Prazo alerta(Horas) deve ser maior que zero.", groups = SaveGroup.class)
     private Integer prazoAlertaHoras;
     private Boolean considerarFinalDeSemanaNoPrazo;
     @ManyToOne
     @JoinColumn(name = "idprioridade")
+    @NotNull(message = "Prioridade é obrigatório.", groups = SaveGroup.class)
     private Prioridade prioridade;
     private Boolean ativo;
     private Boolean encerramentoAutomatico;
@@ -40,57 +56,92 @@ public class Servico implements Serializable {
     @JoinColumn(name = "idcentrocusto")
     private CentroCusto centroCusto;
     private Boolean enviarAplicativoMovel;
-    @ManyToMany
-    @JoinTable(name = "servicoatributo",
-    joinColumns = {
-        @JoinColumn(name = "idatributo")},
-    inverseJoinColumns = {
-        @JoinColumn(name = "idservico")})
-    private List<Atributo> atributos;
-    @ManyToMany
+    @OneToMany(targetEntity = ServicoAtributo.class, mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServicoAtributo> atributos;
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "servicoepi",
-    joinColumns = {
-        @JoinColumn(name = "idepi")},
-    inverseJoinColumns = {
-        @JoinColumn(name = "idservico")})
+            joinColumns = {
+                @JoinColumn(name = "idservico")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "idepi")})
     private List<EPI> epis;
-    @ManyToMany
-    @JoinTable(name = "servicomaterial",
-    joinColumns = {
-        @JoinColumn(name = "idmaterial")},
-    inverseJoinColumns = {
-        @JoinColumn(name = "idservico")})
-    private List<Material> materiais;
-    @OneToMany(targetEntity = ServicoCusto.class, mappedBy = "servico")
+    @OneToMany(targetEntity = ServicoMaterial.class, mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ServicoMaterial> materiais;
+    @OneToMany(targetEntity = ServicoCusto.class, mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServicoCusto> custos;
-    @OneToMany(targetEntity = ServicoTramite.class, mappedBy = "servico")
+    @OneToMany(targetEntity = ServicoTramite.class, mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServicoTramite> tramites;
     @ManyToOne
     @JoinColumn(name = "idtiposervico")
+    @NotNull(message = "Tipo serviço é obrigatório.", groups = SaveGroup.class)
     private TipoServico tipoServico;
+    @ManyToOne
+    @JoinColumn(name = "idempresa")
+    private Empresa empresa;
 
-    public Boolean getAtivo() {
-        return ativo;
+    @Override
+    public Long getId() {
+        return id;
     }
 
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public List<Atributo> getAtributos() {
-        return atributos;
+    public String getServico() {
+        return servico;
     }
 
-    public void setAtributos(List<Atributo> atributos) {
-        this.atributos = atributos;
+    public void setServico(String servico) {
+        this.servico = servico;
     }
 
-    public CentroCusto getCentroCusto() {
-        return centroCusto;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setCentroCusto(CentroCusto centroCusto) {
-        this.centroCusto = centroCusto;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getProcedimento() {
+        return procedimento;
+    }
+
+    public void setProcedimento(String procedimento) {
+        this.procedimento = procedimento;
+    }
+
+    public GrupoServico getGrupoServico() {
+        return grupoServico;
+    }
+
+    public void setGrupoServico(GrupoServico grupoServico) {
+        this.grupoServico = grupoServico;
+    }
+
+    public Integer getPrazoHoras() {
+        return prazoHoras;
+    }
+
+    public void setPrazoHoras(Integer prazoHoras) {
+        this.prazoHoras = prazoHoras;
+    }
+
+    public Integer getPrazoClienteHoras() {
+        return prazoClienteHoras;
+    }
+
+    public void setPrazoClienteHoras(Integer prazoClienteHoras) {
+        this.prazoClienteHoras = prazoClienteHoras;
+    }
+
+    public Integer getPrazoAlertaHoras() {
+        return prazoAlertaHoras;
+    }
+
+    public void setPrazoAlertaHoras(Integer prazoAlertaHoras) {
+        this.prazoAlertaHoras = prazoAlertaHoras;
     }
 
     public Boolean getConsiderarFinalDeSemanaNoPrazo() {
@@ -101,12 +152,20 @@ public class Servico implements Serializable {
         this.considerarFinalDeSemanaNoPrazo = considerarFinalDeSemanaNoPrazo;
     }
 
-    public List<ServicoCusto> getCustos() {
-        return custos;
+    public Prioridade getPrioridade() {
+        return prioridade;
     }
 
-    public void setCustos(List<ServicoCusto> custos) {
-        this.custos = custos;
+    public void setPrioridade(Prioridade prioridade) {
+        this.prioridade = prioridade;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 
     public Boolean getEncerramentoAutomatico() {
@@ -117,20 +176,12 @@ public class Servico implements Serializable {
         this.encerramentoAutomatico = encerramentoAutomatico;
     }
 
-    public Boolean getEnviarAplicativoMovel() {
-        return enviarAplicativoMovel;
+    public Boolean getNaoAdmiteDuplicacao() {
+        return naoAdmiteDuplicacao;
     }
 
-    public void setEnviarAplicativoMovel(Boolean enviarAplicativoMovel) {
-        this.enviarAplicativoMovel = enviarAplicativoMovel;
-    }
-
-    public List<EPI> getEpis() {
-        return epis;
-    }
-
-    public void setEpis(List<EPI> epis) {
-        this.epis = epis;
+    public void setNaoAdmiteDuplicacao(Boolean naoAdmiteDuplicacao) {
+        this.naoAdmiteDuplicacao = naoAdmiteDuplicacao;
     }
 
     public Boolean getExigirCPF() {
@@ -149,76 +200,60 @@ public class Servico implements Serializable {
         this.exigirRG = exigirRG;
     }
 
-    public GrupoServico getGrupoServico() {
-        return grupoServico;
+    public CentroCusto getCentroCusto() {
+        return centroCusto;
     }
 
-    public void setGrupoServico(GrupoServico grupoServico) {
-        this.grupoServico = grupoServico;
+    public void setCentroCusto(CentroCusto centroCusto) {
+        this.centroCusto = centroCusto;
     }
 
-    public Integer getId() {
-        return id;
+    public Boolean getEnviarAplicativoMovel() {
+        return enviarAplicativoMovel;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setEnviarAplicativoMovel(Boolean enviarAplicativoMovel) {
+        this.enviarAplicativoMovel = enviarAplicativoMovel;
     }
 
-    public List<Material> getMateriais() {
+    public List<ServicoAtributo> getAtributos() {
+        return atributos;
+    }
+
+    public void setAtributos(List<ServicoAtributo> atributos) {
+        this.atributos = atributos;
+    }
+
+    public List<EPI> getEpis() {
+        return epis;
+    }
+
+    public void setEpis(List<EPI> epis) {
+        this.epis = epis;
+    }
+
+    public List<ServicoMaterial> getMateriais() {
         return materiais;
     }
 
-    public void setMateriais(List<Material> materiais) {
+    public void setMateriais(List<ServicoMaterial> materiais) {
         this.materiais = materiais;
     }
 
-    public Boolean getNaoAdmiteDuplicacao() {
-        return naoAdmiteDuplicacao;
+    public List<ServicoCusto> getCustos() {
+        return custos;
     }
 
-    public void setNaoAdmiteDuplicacao(Boolean naoAdmiteDuplicacao) {
-        this.naoAdmiteDuplicacao = naoAdmiteDuplicacao;
+    public void setCustos(List<ServicoCusto> custos) {
+        this.custos = custos;
     }
 
-    public Integer getPrazoAlertaHoras() {
-        return prazoAlertaHoras;
+    public List<ServicoTramite> getTramites() {
+        return tramites;
     }
 
-    public void setPrazoAlertaHoras(Integer prazoAlertaHoras) {
-        this.prazoAlertaHoras = prazoAlertaHoras;
-    }
-
-    public Integer getPrazoClienteHoras() {
-        return prazoClienteHoras;
-    }
-
-    public void setPrazoClienteHoras(Integer prazoClienteHoras) {
-        this.prazoClienteHoras = prazoClienteHoras;
-    }
-
-    public Integer getPrazoHoras() {
-        return prazoHoras;
-    }
-
-    public void setPrazoHoras(Integer prazoHoras) {
-        this.prazoHoras = prazoHoras;
-    }
-
-    public Prioridade getPrioridade() {
-        return prioridade;
-    }
-
-    public void setPrioridade(Prioridade prioridade) {
-        this.prioridade = prioridade;
-    }
-
-    public String getServico() {
-        return servico;
-    }
-
-    public void setServico(String servico) {
-        this.servico = servico;
+    public void setTramites(List<ServicoTramite> tramites) {
+        this.tramites = tramites;
     }
 
     public TipoServico getTipoServico() {
@@ -229,11 +264,19 @@ public class Servico implements Serializable {
         this.tipoServico = tipoServico;
     }
 
-    public List<ServicoTramite> getTramites() {
-        return tramites;
+    public Empresa getEmpresa() {
+        return empresa;
     }
 
-    public void setTramites(List<ServicoTramite> tramites) {
-        this.tramites = tramites;
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public interface SaveGroup extends Default {
+
+    }
+
+    public interface CancelGroup extends Default {
+
     }
 }

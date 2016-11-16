@@ -65,7 +65,6 @@ public class SetorWindow extends BaseWindow<Integer, Setor> {
 
         FormLayout content = new FormLayout();
         content.setSizeFull();
-        content.setMargin(new MarginInfo(true));
         content.setSpacing(true);
 
         content.addComponent(getTxtId());
@@ -84,10 +83,13 @@ public class SetorWindow extends BaseWindow<Integer, Setor> {
         content.addComponent(h);
 
         content.addComponent(getTbSetorCriterio());
-        content.addComponent(getBtSave());
-        content.setComponentAlignment(getBtSave(), Alignment.BOTTOM_RIGHT);
+        
+        VerticalLayout vl = new VerticalLayout(content, getBtSave());
 
-        setContent(content);
+        vl.setComponentAlignment(getBtSave(), Alignment.BOTTOM_RIGHT);
+        vl.setMargin(new MarginInfo(true));
+        
+        setContent(vl);
 
         setWidth(800, Unit.PIXELS);
 

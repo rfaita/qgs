@@ -15,6 +15,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.cdi.CDIUI;
 import com.vaadin.cdi.CDIViewProvider;
 import com.vaadin.cdi.access.JaasAccessControl;
+import com.vaadin.data.Validator;
 import com.vaadin.server.*;
 import com.vaadin.server.Page.BrowserWindowResizeEvent;
 import com.vaadin.shared.Position;
@@ -135,7 +136,7 @@ public final class QGSUI extends UI {
                 message.append(c.getMessage()).append("\n");
             });
             QGSUI.showWarn(message.toString());
-        } else if (ex.getCause() instanceof ValidationException) {
+        } else if (ex.getCause() instanceof ValidationException || ex instanceof Validator.InvalidValueException) {
             QGSUI.showWarn(ex.getCause().getMessage());
         } else {
             QGSUI.showError(ex.getMessage());

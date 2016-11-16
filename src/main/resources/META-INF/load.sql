@@ -20,6 +20,11 @@ insert into tipomaterial  (id, tipomaterial) values (1, 'Geral');
 insert into tipomaterial  (id, tipomaterial) values (2, 'Encanamento');
 insert into tipomaterial  (id, tipomaterial) values (3, 'Asfalto');
 
+insert into tiporubrica  (id, tiporubrica) values (1, 'Tipo 1');
+insert into tiporubrica  (id, tiporubrica) values (2, 'Tipo 2');
+insert into tiporubrica  (id, tiporubrica) values (3, 'Tipo 3');
+insert into tiporubrica  (id, tiporubrica) values (4, 'Tipo 4');
+
 insert into tiposervico  (id, tiposervico) values (1, 'Geral');
 insert into tiposervico  (id, tiposervico) values (2, 'Operacional');
 insert into tiposervico  (id, tiposervico) values (3, 'Comercial');
@@ -33,6 +38,11 @@ insert into tipoatributo(id, tipoatributo,tipoDado) values (4, 'Data',3);
 insert into prioridade(id, prioridade, ativo) values (1, 'Baixo', true);
 insert into prioridade(id, prioridade, ativo) values (2, 'Médio', true);
 insert into prioridade(id, prioridade, ativo) values (3, 'Alto', true);
+
+insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (1, 'teste1', true, 1, 1,1);
+insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (2, 'teste2', true, 1, 1,2);
+insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (3, 'teste3', true, 1, 1,3);
+insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (4, 'teste4', true, 1, 1,4);
 
 insert into pais(id, pais, abrev) values (1, 'Brasil', 'BR');
 

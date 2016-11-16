@@ -15,6 +15,8 @@ import javax.validation.groups.Default;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "Atributo.findAll", query = "SELECT p FROM Atributo p")
+    ,
+    @NamedQuery(name = "Atributo.findAllByParam", query = "SELECT o FROM Atributo o JOIN FETCH o.empresa WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
 })
 public class Atributo extends BaseBean<Integer> {
 

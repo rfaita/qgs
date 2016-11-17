@@ -136,8 +136,10 @@ public final class QGSUI extends UI {
                 message.append(c.getMessage()).append("\n");
             });
             QGSUI.showWarn(message.toString());
-        } else if (ex.getCause() instanceof ValidationException || ex instanceof Validator.InvalidValueException) {
+        } else if (ex.getCause() instanceof ValidationException) {
             QGSUI.showWarn(ex.getCause().getMessage());
+        } else if (ex instanceof Validator.InvalidValueException) {
+            QGSUI.showWarn(ex.getMessage());
         } else {
             QGSUI.showError(ex.getMessage());
         }

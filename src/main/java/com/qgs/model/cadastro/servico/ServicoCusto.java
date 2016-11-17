@@ -20,7 +20,7 @@ public class ServicoCusto implements Serializable {
     @Id
     @SequenceGenerator(name = "seqservicocusto", sequenceName = "seqservicocusto", initialValue = 1000, allocationSize = 100)
     @GeneratedValue(generator = "seqservicocusto")
-    private Integer id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "idservico")
     private Servico servico;
@@ -29,30 +29,14 @@ public class ServicoCusto implements Serializable {
     private Rubrica rubrica;
     private Integer qtdParcela;
     private Double valor;
-    private TipoCustomEnum tipoCustomEnum;
+    private TipoCustomEnum tipoCusto;
 
-    public Rubrica getRubrica() {
-        return rubrica;
-    }
-
-    public void setRubrica(Rubrica rubrica) {
-        this.rubrica = rubrica;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getQtdParcela() {
-        return qtdParcela;
-    }
-
-    public void setQtdParcela(Integer qtdParcela) {
-        this.qtdParcela = qtdParcela;
     }
 
     public Servico getServico() {
@@ -63,12 +47,20 @@ public class ServicoCusto implements Serializable {
         this.servico = servico;
     }
 
-    public TipoCustomEnum getTipoCustomEnum() {
-        return tipoCustomEnum;
+    public Rubrica getRubrica() {
+        return rubrica;
     }
 
-    public void setTipoCustomEnum(TipoCustomEnum tipoCustomEnum) {
-        this.tipoCustomEnum = tipoCustomEnum;
+    public void setRubrica(Rubrica rubrica) {
+        this.rubrica = rubrica;
+    }
+
+    public Integer getQtdParcela() {
+        return qtdParcela;
+    }
+
+    public void setQtdParcela(Integer qtdParcela) {
+        this.qtdParcela = qtdParcela;
     }
 
     public Double getValor() {
@@ -78,4 +70,13 @@ public class ServicoCusto implements Serializable {
     public void setValor(Double valor) {
         this.valor = valor;
     }
+
+    public TipoCustomEnum getTipoCusto() {
+        return tipoCusto;
+    }
+
+    public void setTipoCusto(TipoCustomEnum tipoCusto) {
+        this.tipoCusto = tipoCusto;
+    }
+
 }

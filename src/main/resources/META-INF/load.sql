@@ -58,6 +58,14 @@ insert into servico(id, servico, ativo,  idempresa, idtiposervico) values (4, 't
 insert into servico(id, servico, ativo,  idempresa, idtiposervico) values (5, 'teste5', true,  2,2);
 insert into servico(id, servico, ativo,  idempresa, idtiposervico) values (6, 'teste6', true,  3,3);
 
+insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (1, 'teste1', true,  1,3);
+insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (2, 'teste2', true,  1,3);
+insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (3, 'teste3', true,  1,3);
+insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (4, 'teste4', true,  1,3);
+insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (5, 'teste5', true,  1,3);
+insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (6, 'teste6', true,  2,3);
+insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (7, 'teste7', true,  3,3);
+
 insert into pais(id, pais, abrev) values (1, 'Brasil', 'BR');
 
 insert into uf (id, descricao, uf, idpais) values (1,'Acre','AC',1);

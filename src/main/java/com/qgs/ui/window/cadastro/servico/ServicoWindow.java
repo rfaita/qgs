@@ -1,26 +1,30 @@
 package com.qgs.ui.window.cadastro.servico;
 
 import com.qgs.enums.CriterioSelecaoLocalidadeEnum;
+import com.qgs.enums.TipoCustomEnum;
 import com.qgs.model.cadastro.Atributo;
 import com.qgs.model.cadastro.EPI;
 import com.qgs.model.cadastro.Material;
 import com.qgs.model.cadastro.Prioridade;
+import com.qgs.model.cadastro.rubrica.Rubrica;
 import com.qgs.model.cadastro.servico.Servico;
 import com.qgs.model.cadastro.servico.ServicoAssociado;
 import com.qgs.model.cadastro.servico.ServicoAtributo;
+import com.qgs.model.cadastro.servico.ServicoCusto;
 import com.qgs.model.cadastro.servico.ServicoMaterial;
 import com.qgs.model.cadastro.servico.TipoServico;
 import com.qgs.service.ListAllService;
 import com.qgs.service.cadastro.servico.ServicoService;
 import com.qgs.service.secutiry.SecurityUtils;
 import com.qgs.ui.QGSUI;
+import com.qgs.ui.util.validator.DoubleValidator;
+import com.qgs.ui.util.validator.PositiveIntegerValidator;
 import com.qgs.ui.view.cadastro.servico.ServicoView;
 import com.qgs.ui.window.base.BaseWindow;
 import com.qgs.util.validation.Validation;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.BeanContainer;
-import com.vaadin.data.validator.RegexpValidator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Sizeable.Unit;
 import com.vaadin.shared.ui.MarginInfo;
@@ -88,6 +92,18 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
     private Table tbServicoAssociado;
     private Long indexServicoAssociado = -1L;
 
+    private BeanContainer<Integer, Rubrica> bcRubrica;
+    private ComboBox cmbRubrica;
+    private TextField txtQtdParcela;
+    private TextField txtValor;
+    private BeanContainer<String, TipoCustomEnum> bcTipoCusto;
+    private OptionGroup ogTipoCusto;
+    private Button btAddRubrica;
+    private Button btDelRubrica;
+    private BeanContainer<Long, ServicoCusto> bcServicoCusto;
+    private Table tbServicoCusto;
+    private Long indexServicoCusto = -1L;
+
     @EJB
     private ServicoService servicoService;
     @EJB
@@ -130,12 +146,15 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         tabSheet.addTab(getAbaAtributo(), "Atributos");
         tabSheet.addTab(getAbaMaterial(), "Materiais");
         tabSheet.addTab(getAbaAssociado(), "Serviços Associados");
+        tabSheet.addTab(getAbaCusto(), "Serviço Custo");
 
         VerticalLayout vl = new VerticalLayout(tabSheet, getBtSave());
 
         vl.setComponentAlignment(getBtSave(), Alignment.BOTTOM_RIGHT);
         vl.setMargin(new MarginInfo(true));
         vl.setSpacing(true);
+
+        setWidth(900, Unit.PIXELS);
 
         setContent(vl);
 
@@ -212,6 +231,26 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         return content;
     }
 
+    private FormLayout getAbaCusto() {
+        FormLayout content = new FormLayout();
+        content.setSizeFull();
+        content.setMargin(new MarginInfo(true));
+        content.setSpacing(true);
+
+        content.addComponent(getCmbRubrica());
+        content.addComponent(getOgTipoCusto());
+        content.addComponent(getTxtQtdParcela());
+        content.addComponent(getTxtValor());
+
+        HorizontalLayout h = new HorizontalLayout(getBtAddRubrica(), getBtDelRubrica());
+        h.setWidth(100, Unit.PERCENTAGE);
+
+        content.addComponent(h);
+        content.addComponent(getTbServicoCusto());
+
+        return content;
+    }
+
     @Override
     protected void doLoadDados(Long id) {
         if (id != null && id > 0) {
@@ -238,6 +277,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             getBcServicoAtributo().addAll(getDado().getAtributos());
             getBcServicoMaterial().addAll(getDado().getMateriais());
             getBcServicoAssociado().addAll(getDado().getAssociados());
+            getBcServicoCusto().addAll(getDado().getCustos());
         }
     }
 
@@ -254,7 +294,8 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         if (txtPrazoHoras == null) {
             txtPrazoHoras = new TextField("Prazo(Horas)");
             txtPrazoHoras.setWidth(100, Unit.PERCENTAGE);
-            txtPrazoHoras.addValidator(new RegexpValidator("[1-9]{1}[0-9]*", "Prazo deve ser um número inteiro e positivo."));
+            txtPrazoHoras.addValidator(new PositiveIntegerValidator("Prazo deve ser um número inteiro e positivo."));
+            txtPrazoHoras.setValue("0");
         }
         return txtPrazoHoras;
     }
@@ -263,7 +304,8 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         if (txtPrazoClienteHoras == null) {
             txtPrazoClienteHoras = new TextField("Prazo Cliente(Horas)");
             txtPrazoClienteHoras.setWidth(100, Unit.PERCENTAGE);
-            txtPrazoClienteHoras.addValidator(new RegexpValidator("[1-9]{1}[0-9]*", "Prazo cliente deve ser um número inteiro e positivo."));
+            txtPrazoClienteHoras.addValidator(new PositiveIntegerValidator("Prazo cliente deve ser um número inteiro e positivo."));
+            txtPrazoClienteHoras.setValue("0");
         }
         return txtPrazoClienteHoras;
     }
@@ -272,7 +314,8 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         if (txtPrazoAlertaHoras == null) {
             txtPrazoAlertaHoras = new TextField("Prazo Alerta(Horas)");
             txtPrazoAlertaHoras.setWidth(100, Unit.PERCENTAGE);
-            txtPrazoAlertaHoras.addValidator(new RegexpValidator("[1-9]{1}[0-9]*", "Prazo alerta deve ser um número inteiro e positivo."));
+            txtPrazoAlertaHoras.addValidator(new PositiveIntegerValidator("Prazo alerta deve ser um número inteiro e positivo."));
+            txtPrazoAlertaHoras.setValue("0");
         }
         return txtPrazoAlertaHoras;
     }
@@ -585,7 +628,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
                 sa.setId(indexServicoMaterial--);
                 getBcServicoMaterial().addBean(sa);
                 getCmbMaterial().setValue(null);
-                getTxtQtdMaterial().setValue("");
+                getTxtQtdMaterial().setValue("0");
 
             });
         }
@@ -642,7 +685,8 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         if (txtQtdMaterial == null) {
             txtQtdMaterial = new TextField("Qtd.");
             txtQtdMaterial.setWidth(100, Unit.PERCENTAGE);
-            txtQtdMaterial.addValidator(new RegexpValidator("[1-9]{1}[0-9]*", "Qtd. Material deve ser um número inteiro e positivo."));
+            txtQtdMaterial.addValidator(new PositiveIntegerValidator("Qtd. Material deve ser um número inteiro e positivo."));
+            txtQtdMaterial.setValue("0");
         }
         return txtQtdMaterial;
     }
@@ -787,7 +831,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             tbServicoAssociado.setContainerDataSource(getBcServicoAssociado());
             tbServicoAssociado.setSortAscending(false);
 
-            tbServicoAssociado.addGeneratedColumn("servico", (Table source, Object itemId, Object columnId) -> {
+            tbServicoAssociado.addGeneratedColumn("servicoAssociado", (Table source, Object itemId, Object columnId) -> {
                 Property<Servico> prop = source.getItem(itemId).getItemProperty(columnId);
                 if (prop.getType().equals(Servico.class)) {
                     return prop.getValue().getServico();
@@ -802,7 +846,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
                 return "";
             });
 
-            tbServicoAssociado.setVisibleColumns("servico", "criterioSelecaoLocalidade");
+            tbServicoAssociado.setVisibleColumns("servicoAssociado", "criterioSelecaoLocalidade");
             tbServicoAssociado.setColumnExpandRatio("servico", 1);
             tbServicoAssociado.setColumnHeaders("Serviço", "Critério de Localidade");
 
@@ -812,15 +856,196 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         return tbServicoAssociado;
     }
 
+    private BeanContainer<Integer, Rubrica> getBcRubrica() {
+        if (bcRubrica == null) {
+            bcRubrica = new BeanContainer<Integer, Rubrica>(Rubrica.class);
+            bcRubrica.setBeanIdResolver((Rubrica bean) -> bean.getId());
+        }
+        return bcRubrica;
+    }
+
+    private ComboBox getCmbRubrica() {
+        if (cmbRubrica == null) {
+            cmbRubrica = new ComboBox("Rubrica");
+            cmbRubrica.setInputPrompt("Informe a rubrica...");
+            cmbRubrica.setContainerDataSource(getBcRubrica());
+            cmbRubrica.setWidth(100, Unit.PERCENTAGE);
+            cmbRubrica.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
+            cmbRubrica.setItemCaptionPropertyId("rubrica");
+            cmbRubrica.setImmediate(true);
+        }
+        return cmbRubrica;
+    }
+
+    private TextField getTxtQtdParcela() {
+        if (txtQtdParcela == null) {
+            txtQtdParcela = new TextField("Qtd. Parcelas");
+            txtQtdParcela.setWidth(100, Unit.PERCENTAGE);
+            txtQtdParcela.addValidator(new PositiveIntegerValidator("Qtd. parcelas deve ser um número inteiro e positivo."));
+            txtQtdParcela.setValue("0");
+        }
+        return txtQtdParcela;
+    }
+
+    private TextField getTxtValor() {
+        if (txtValor == null) {
+            txtValor = new TextField("Valor($)");
+            txtValor.setWidth(100, Unit.PERCENTAGE);
+            txtValor.addValidator(new DoubleValidator("Valor deve ser um número decimal com duas casas."));
+            txtValor.setValue("0,00");
+        }
+        return txtValor;
+    }
+
+    private BeanContainer<Long, ServicoCusto> getBcServicoCusto() {
+        if (bcServicoCusto == null) {
+            bcServicoCusto = new BeanContainer<Long, ServicoCusto>(ServicoCusto.class);
+            bcServicoCusto.setBeanIdResolver((ServicoCusto bean) -> bean.getId());
+        }
+        return bcServicoCusto;
+    }
+
+    private Table getTbServicoCusto() {
+        if (tbServicoCusto == null) {
+            tbServicoCusto = new Table();
+            tbServicoCusto.setWidth(100, Unit.PERCENTAGE);
+            tbServicoCusto.setHeight(300, Unit.PIXELS);
+            tbServicoCusto.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
+            tbServicoCusto.addStyleName(ValoTheme.TABLE_COMPACT);
+            tbServicoCusto.setSelectable(true);
+
+            tbServicoCusto.setColumnCollapsingAllowed(true);
+            tbServicoCusto.setColumnReorderingAllowed(true);
+            tbServicoCusto.setContainerDataSource(getBcServicoCusto());
+            tbServicoCusto.setSortAscending(false);
+
+            tbServicoCusto.addGeneratedColumn("rubrica", (Table source, Object itemId, Object columnId) -> {
+                Property<Rubrica> prop = source.getItem(itemId).getItemProperty(columnId);
+                if (prop.getType().equals(Rubrica.class)) {
+                    return prop.getValue().getRubrica();
+                }
+                return "";
+            });
+            tbServicoCusto.addGeneratedColumn("tipoCusto", (Table source, Object itemId, Object columnId) -> {
+                Property<TipoCustomEnum> prop = source.getItem(itemId).getItemProperty(columnId);
+                if (prop.getType().equals(TipoCustomEnum.class)) {
+                    return prop.getValue().getTipoCusto();
+                }
+                return "";
+            });
+
+            tbServicoCusto.setVisibleColumns("rubrica", "tipoCusto", "valor");
+            tbServicoCusto.setColumnExpandRatio("rubrica", 1);
+            tbServicoCusto.setColumnHeaders("Rubrcica", "Tipo de custo", "Valor");
+
+            tbServicoCusto.setImmediate(true);
+        }
+
+        return tbServicoCusto;
+    }
+
+    private Button getBtAddRubrica() {
+        if (btAddRubrica == null) {
+            btAddRubrica = new Button("Adicionar");
+            btAddRubrica.setIcon(FontAwesome.PLUS);
+            btAddRubrica.addClickListener((Button.ClickEvent event) -> {
+                if (getCmbRubrica().getValue() == null) {
+                    QGSUI.showWarn("Informe a rubrica.");
+                    return;
+                }
+                if (getTxtValor().getValue() == null || getTxtValor().getValue().isEmpty()) {
+                    QGSUI.showWarn("Informe o valor da rubrica.");
+                    return;
+                }
+
+                if (getOgTipoCusto().getValue().equals(TipoCustomEnum.PARCELADO)) {
+                    if (getTxtQtdParcela().getValue() == null || getTxtQtdParcela().getValue().isEmpty()) {
+                        QGSUI.showWarn("Informe a qtd. de parcelas da rubrica.");
+                        return;
+                    }
+                    try {
+                        getTxtQtdParcela().validate();
+                    } catch (Validator.InvalidValueException ex) {
+                        QGSUI.doCatch(ex);
+                        return;
+                    }
+                }
+
+                try {
+                    getTxtValor().validate();
+                } catch (Validator.InvalidValueException ex) {
+                    QGSUI.doCatch(ex);
+                    return;
+                }
+
+                try {
+                    ServicoCusto sc = new ServicoCusto();
+                    sc.setRubrica(getBcRubrica().getItem(getCmbRubrica().getValue()).getBean());
+                    sc.setQtdParcela(Validation.validInteger(getTxtQtdParcela().getValue()));
+                    sc.setValor(Validation.validDouble(getTxtValor().getValue()));
+                    sc.setTipoCusto(getBcTipoCusto().getItem(getOgTipoCusto().getValue()).getBean());
+                    sc.setId(indexServicoCusto--);
+                    getBcServicoCusto().addBean(sc);
+                    getCmbRubrica().setValue(null);
+                    getTxtQtdParcela().setValue("0");
+                    getTxtValor().setValue("0");
+                    getOgTipoCusto().setValue(TipoCustomEnum.A_VISTA);
+                } catch (Exception ex) {
+                    QGSUI.doCatch(ex);
+                }
+
+            });
+        }
+        return btAddRubrica;
+    }
+
+    private Button getBtDelRubrica() {
+        if (btDelRubrica == null) {
+            btDelRubrica = new Button("Remover");
+            btDelRubrica.setIcon(FontAwesome.MINUS);
+            btDelRubrica.addClickListener((Button.ClickEvent event) -> {
+                if (getTbServicoCusto().getValue() != null) {
+                    ServicoCusto o = getBcServicoCusto().getItem(getTbServicoCusto().getValue()).getBean();
+                    getBcServicoCusto().removeItem(o.getId());
+                } else {
+                    QGSUI.showWarn("Selecione o que deseja remover.");
+                }
+
+            });
+        }
+        return btDelRubrica;
+    }
+
+    private BeanContainer<String, TipoCustomEnum> getBcTipoCusto() {
+        if (bcTipoCusto == null) {
+            bcTipoCusto = new BeanContainer<String, TipoCustomEnum>(TipoCustomEnum.class);
+            bcTipoCusto.setBeanIdResolver((TipoCustomEnum bean) -> bean.getTipoCusto());
+        }
+        return bcTipoCusto;
+    }
+
+    private OptionGroup getOgTipoCusto() {
+        if (ogTipoCusto == null) {
+            ogTipoCusto = new OptionGroup("Forma pagamento", getBcTipoCusto());
+            ogTipoCusto.addValueChangeListener(new Property.ValueChangeListener() {
+                @Override
+                public void valueChange(Property.ValueChangeEvent event) {
+                    getTxtQtdParcela().setEnabled(getBcTipoCusto().getItem(getOgTipoCusto().getValue()).getBean().equals(TipoCustomEnum.PARCELADO));
+                    getTxtQtdParcela().setValue("0");
+                }
+            });
+            ogTipoCusto.setValue(TipoCustomEnum.A_VISTA);
+        }
+        return ogTipoCusto;
+    }
+
     @Override
     protected void doSave() {
 
         try {
-
             getTxtPrazoHoras().validate();
             getTxtPrazoClienteHoras().validate();
             getTxtPrazoAlertaHoras().validate();
-
         } catch (Validator.InvalidValueException ex) {
             QGSUI.doCatch(ex);
             return;
@@ -884,6 +1109,15 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             }
             getDado().getMateriais().add(sm);
         }
+        getDado().setCustos(new ArrayList<ServicoCusto>());
+        for (Long id : getBcServicoCusto().getItemIds()) {
+            ServicoCusto sc = getBcServicoCusto().getItem(id).getBean();
+            if (sc.getId() != null && sc.getId() < 0) {
+                sc.setId(null);
+                sc.setServico(getDado());
+            }
+            getDado().getCustos().add(sc);
+        }
 
         try {
 
@@ -906,6 +1140,8 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         getBcMaterial().addAll(listAllService.findAllByParam(Material.class, "idEmpresa", securityUtils.getEmpresa().getId()));
         getBcServico().addAll(listAllService.findAllByParam(Servico.class, "idEmpresa", securityUtils.getEmpresa().getId()));
         getBcCriterioSelecaoLocalidade().addAll(Arrays.asList(CriterioSelecaoLocalidadeEnum.values()));
+        getBcRubrica().addAll(listAllService.findAllByParam(Rubrica.class, "idEmpresa", securityUtils.getEmpresa().getId()));
+        getBcTipoCusto().addAll(Arrays.asList(TipoCustomEnum.values()));
     }
 
     @Override

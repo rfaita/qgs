@@ -20,6 +20,10 @@ insert into tipomaterial  (id, tipomaterial) values (1, 'Geral');
 insert into tipomaterial  (id, tipomaterial) values (2, 'Encanamento');
 insert into tipomaterial  (id, tipomaterial) values (3, 'Asfalto');
 
+insert into tipoequipe  (id, tipoequipe) values (1, 'tipoequipe1');
+insert into tipoequipe  (id, tipoequipe) values (2, 'tipoequipe2');
+insert into tipoequipe  (id, tipoequipe) values (3, 'tipoequipe3');
+
 insert into gruposervico  (id, gruposervico, ativo) values (1, 'grupo1', true);
 insert into gruposervico  (id, gruposervico, ativo) values (2, 'grupo2', true);
 insert into gruposervico  (id, gruposervico, ativo) values (3, 'grupo3', false);
@@ -78,6 +82,16 @@ insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (4, 't
 insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (5, 'teste5', true,  1,3);
 insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (6, 'teste6', true,  2,3);
 insert into rubrica(id, rubrica, ativo,  idempresa, idtiporubrica) values (7, 'teste7', true,  3,3);
+
+insert into departamento(id, departamento, idtipodepartamento, idempresa, ativo) values (1, 'depto1', 1, 1, true);
+insert into departamento(id, departamento, idtipodepartamento, idempresa, ativo) values (2, 'depto2', 1, 1, false);
+insert into departamento(id, departamento, idtipodepartamento, idempresa, ativo) values (3, 'depto3', 1, 1, true);
+insert into departamento(id, departamento, idtipodepartamento, idempresa, ativo) values (4, 'depto4', 1, 2, true);
+
+insert into equipe(id, equipe, idtipoequipe, iddepartamento, idempresa, ativo) values(1, 'equipe 1', 1, 1, 1, true);
+insert into equipe(id, equipe, idtipoequipe, iddepartamento, idempresa, ativo) values(2, 'equipe 2', 1, 1, 2, true);
+insert into equipe(id, equipe, idtipoequipe, iddepartamento, idempresa, ativo) values(3, 'equipe 3', 1, 1, 1, false);
+insert into equipe(id, equipe, idtipoequipe, iddepartamento, idempresa, ativo) values(4, 'equipe 4', 1, 1, 1, true);
 
 insert into pais(id, pais, abrev) values (1, 'Brasil', 'BR');
 

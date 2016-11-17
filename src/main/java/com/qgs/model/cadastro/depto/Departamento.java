@@ -12,6 +12,12 @@ import javax.validation.groups.Default;
  * @author rafael
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Departamento.findAllByParam", query = "SELECT o FROM Departamento o "
+            + "\n JOIN FETCH o.empresa "
+            + "\n JOIN FETCH o.tipoDepartamento "
+            + "\n WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
+})
 public class Departamento extends BaseBean<Integer> {
 
     @Id

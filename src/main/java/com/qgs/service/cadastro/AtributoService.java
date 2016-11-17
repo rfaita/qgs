@@ -67,7 +67,7 @@ public class AtributoService {
             hql.append("AND upper(o.atributo) LIKE :atributo ");
         }
         if (o.getTipoAtributo() != null) {
-            hql.append("AND o.tipoDepartamento.id = :idTipoAtributo ");
+            hql.append("AND o.tipoAtributo.id = :idTipoAtributo ");
         }
 
         hql.append("AND (coalesce(o.ativo, false) = true ");

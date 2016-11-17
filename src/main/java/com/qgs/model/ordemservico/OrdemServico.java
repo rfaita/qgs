@@ -38,6 +38,28 @@ public class OrdemServico extends BaseBean<Long> {
     private String rgSolicitante;
     private Boolean possuiCobranca;
     private StatusOrdemServicoEnum statusOrdemServico;
+    @ManyToOne
+    @JoinColumn(name = "idorigemAtendimento")
+    private OrigemAtendimento origemAtendimento;
+    @ManyToOne
+    @JoinColumn(name = "idformaAtendimento")
+    private FormaAtendimento formaAtendimento;
+
+    public OrigemAtendimento getOrigemAtendimento() {
+        return origemAtendimento;
+    }
+
+    public void setOrigemAtendimento(OrigemAtendimento origemAtendimento) {
+        this.origemAtendimento = origemAtendimento;
+    }
+
+    public FormaAtendimento getFormaAtendimento() {
+        return formaAtendimento;
+    }
+
+    public void setFormaAtendimento(FormaAtendimento formaAtendimento) {
+        this.formaAtendimento = formaAtendimento;
+    }
 
     @Override
     public Long getId() {

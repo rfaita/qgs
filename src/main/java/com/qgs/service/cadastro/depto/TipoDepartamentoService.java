@@ -58,7 +58,7 @@ public class TipoDepartamentoService {
         hql.append("WHERE o.empresa.id = :idEmpresa ");
 
         if (o.getTipoDepartamento() != null && !o.getTipoDepartamento().isEmpty()) {
-            hql.append("AND upper(o.epi) LIKE :tipoDepartamento ");
+            hql.append("AND upper(o.tipoDepartamento) LIKE :tipoDepartamento ");
         }
         if (o.getTipoServicoAtendido() != null) {
             hql.append("AND o.tipoServicoAtendido.id = :idTipoServicoAtendido ");

@@ -58,7 +58,7 @@ public class RubricaService {
         hql.append("WHERE o.empresa.id = :idEmpresa ");
 
         if (o.getRubrica() != null && !o.getRubrica().isEmpty()) {
-            hql.append("AND upper(o.material) LIKE :material ");
+            hql.append("AND upper(o.rubrica) LIKE :rubrica ");
         }
 
         if (o.getTipoRubrica() != null) {
@@ -80,7 +80,7 @@ public class RubricaService {
         }
 
         if (o.getRubrica() != null && !o.getRubrica().isEmpty()) {
-            q.setParameter("material", "%" + o.getRubrica().toUpperCase() + "%");
+            q.setParameter("rubrica", "%" + o.getRubrica().toUpperCase() + "%");
         }
 
         if (o.getTipoRubrica() != null) {

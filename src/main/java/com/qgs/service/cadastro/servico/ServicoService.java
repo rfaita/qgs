@@ -69,7 +69,7 @@ public class ServicoService {
         hql.append("WHERE o.empresa.id = :idEmpresa ");
 
         if (o.getServico() != null && !o.getServico().isEmpty()) {
-            hql.append("AND upper(o.material) LIKE :material ");
+            hql.append("AND upper(o.servico) LIKE :servico ");
         }
 
         if (o.getTipoServico() != null) {
@@ -91,7 +91,7 @@ public class ServicoService {
         }
 
         if (o.getServico() != null && !o.getServico().isEmpty()) {
-            q.setParameter("material", "%" + o.getServico().toUpperCase() + "%");
+            q.setParameter("servico", "%" + o.getServico().toUpperCase() + "%");
         }
 
         if (o.getTipoServico() != null) {

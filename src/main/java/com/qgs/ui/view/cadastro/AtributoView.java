@@ -85,7 +85,7 @@ public final class AtributoView extends BaseView<Integer, Atributo> {
 
     @Override
     protected String getColumnExpand() {
-        return "material";
+        return "atributo";
     }
 
     @Override

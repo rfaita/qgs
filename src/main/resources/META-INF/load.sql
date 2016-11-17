@@ -93,6 +93,16 @@ insert into equipe(id, equipe, idtipoequipe, iddepartamento, idempresa, ativo) v
 insert into equipe(id, equipe, idtipoequipe, iddepartamento, idempresa, ativo) values(3, 'equipe 3', 1, 1, 1, false);
 insert into equipe(id, equipe, idtipoequipe, iddepartamento, idempresa, ativo) values(4, 'equipe 4', 1, 1, 1, true);
 
+insert into origematendimento(id, origematendimento, ativo,  idempresa) values (1, 'origem1', true, 1);
+insert into origematendimento(id, origematendimento, ativo,  idempresa) values (2, 'origem2', true, 1);
+insert into origematendimento(id, origematendimento, ativo,  idempresa) values (3, 'origem3', false, 1);
+insert into origematendimento(id, origematendimento, ativo,  idempresa) values (4, 'origem4', true, 2);
+
+insert into formaatendimento(id, formaatendimento, ativo,  idempresa) values (1, 'forma1', true, 1);
+insert into formaatendimento(id, formaatendimento, ativo,  idempresa) values (2, 'forma2', true, 1);
+insert into formaatendimento(id, formaatendimento, ativo,  idempresa) values (3, 'forma3', false, 1);
+insert into formaatendimento(id, formaatendimento, ativo,  idempresa) values (4, 'forma4', true, 2);
+
 insert into pais(id, pais, abrev) values (1, 'Brasil', 'BR');
 
 insert into uf (id, descricao, uf, idpais) values (1,'Acre','AC',1);

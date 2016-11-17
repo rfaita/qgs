@@ -58,7 +58,7 @@ public class EquipeService {
         hql.append("WHERE o.empresa.id = :idEmpresa ");
 
         if (o.getEquipe() != null && !o.getEquipe().isEmpty()) {
-            hql.append("AND upper(o.material) LIKE :material ");
+            hql.append("AND upper(o.equipe) LIKE :equipe ");
         }
 
         if (o.getTipoEquipe() != null) {
@@ -80,7 +80,7 @@ public class EquipeService {
         }
 
         if (o.getEquipe() != null && !o.getEquipe().isEmpty()) {
-            q.setParameter("material", "%" + o.getEquipe().toUpperCase() + "%");
+            q.setParameter("equipe", "%" + o.getEquipe().toUpperCase() + "%");
         }
 
         if (o.getTipoEquipe() != null) {

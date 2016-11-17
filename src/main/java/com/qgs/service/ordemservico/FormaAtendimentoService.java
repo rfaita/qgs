@@ -1,6 +1,6 @@
-package com.qgs.service.cadastro.depto;
+package com.qgs.service.ordemservico;
 
-import com.qgs.model.cadastro.depto.Departamento;
+import com.qgs.model.ordemservico.FormaAtendimento;
 import com.qgs.service.secutiry.SecurityUtils;
 import com.qgs.util.PersistenceUnitHelper;
 import java.util.HashSet;
@@ -19,7 +19,7 @@ import javax.validation.Validator;
  * @author rafael
  */
 @Stateless
-public class DepartamentoService {
+public class FormaAtendimentoService {
 
     @Inject
     private Validator validator;
@@ -28,14 +28,14 @@ public class DepartamentoService {
     @EJB
     private SecurityUtils securityUtils;
 
-    private void validateSave(Departamento o) throws ConstraintViolationException {
-        Set<ConstraintViolation<Departamento>> violations = validator.validate(o, Departamento.SaveGroup.class);
+    private void validateSave(FormaAtendimento epi) throws ConstraintViolationException {
+        Set<ConstraintViolation<FormaAtendimento>> violations = validator.validate(epi, FormaAtendimento.SaveGroup.class);
         if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(new HashSet<ConstraintViolation<Departamento>>(violations));
+            throw new ConstraintViolationException(new HashSet<ConstraintViolation<FormaAtendimento>>(violations));
         }
     }
 
-    public void save(Departamento epi) throws Exception {
+    public void save(FormaAtendimento epi) throws Exception {
 
         validateSave(epi);
 
@@ -47,21 +47,17 @@ public class DepartamentoService {
         }
     }
 
-    public Departamento findById(Integer id) {
-        return helper.getEntityManager().find(Departamento.class, id);
+    public FormaAtendimento findById(Integer id) {
+        return helper.getEntityManager().find(FormaAtendimento.class, id);
     }
 
-    public List<Departamento> findAllByDepartamento(Departamento o) {
-        StringBuilder hql = new StringBuilder("SELECT o FROM Departamento o ");
-        hql.append("JOIN FETCH o.tipoDepartamento ");
+    public List<FormaAtendimento> findAllByFormaAtendimento(FormaAtendimento o) {
+        StringBuilder hql = new StringBuilder("SELECT o FROM FormaAtendimento o ");
         hql.append("JOIN FETCH o.empresa ");
         hql.append("WHERE o.empresa.id = :idEmpresa ");
 
-        if (o.getDepartamento() != null && !o.getDepartamento().isEmpty()) {
-            hql.append("AND upper(o.departamento) LIKE :departamento ");
-        }
-        if (o.getTipoDepartamento() != null) {
-            hql.append("AND o.tipoDepartamento.id = :idTipoDepartamento ");
+        if (o.getFormaAtendimento() != null && !o.getFormaAtendimento().isEmpty()) {
+            hql.append("AND upper(o.formaAtendimento) LIKE :formaAtendimento ");
         }
 
         hql.append("AND (coalesce(o.ativo, false) = true ");
@@ -78,12 +74,8 @@ public class DepartamentoService {
             q.setParameter("idEmpresa", securityUtils.getEmpresa().getId());
         }
 
-        if (o.getTipoDepartamento() != null) {
-            q.setParameter("idTipoDepartamento", o.getTipoDepartamento().getId());
-        }
-
-        if (o.getDepartamento() != null && !o.getDepartamento().isEmpty()) {
-            q.setParameter("departamento", "%" + o.getDepartamento().toUpperCase() + "%");
+        if (o.getFormaAtendimento() != null && !o.getFormaAtendimento().isEmpty()) {
+            q.setParameter("formaAtendimento", "%" + o.getFormaAtendimento().toUpperCase() + "%");
         }
 
         return q.getResultList();

@@ -15,7 +15,10 @@ import javax.validation.groups.Default;
 @NamedQueries({
     @NamedQuery(name = "Material.findAll", query = "SELECT p FROM Material p")
     ,
-    @NamedQuery(name = "Material.findAllByParam", query = "SELECT o FROM Material o JOIN FETCH o.empresa WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
+    @NamedQuery(name = "Material.findAllByParam", query = "SELECT o FROM Material o "
+            + "\n JOIN FETCH o.empresa "
+            + "\n JOIN FETCH o.tipoMaterial "
+            + "\n WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
 })
 public class Material extends BaseBean<Integer> {
 
@@ -27,7 +30,7 @@ public class Material extends BaseBean<Integer> {
     @Size(min = 1, max = 50, message = "O material deve estar preenchido e possuir no máximo 50 caractéres.", groups = SaveGroup.class)
     private String material;
     @NotNull(message = "Descrição do material é obrigatório.", groups = SaveGroup.class)
-    @Size(min = 1, max = 4000, message = "A descrição do material deve estar preenchido e possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
+    @Size(max = 4000, message = "A descrição do material deve possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
     private String descricao;
     private Boolean ativo;
     @ManyToOne

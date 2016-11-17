@@ -25,7 +25,7 @@ public class EPI extends BaseBean<Integer> {
     @Size(min = 1, max = 50, message = "O EPI deve estar preenchido e possuir no máximo 50 caractéres.", groups = SaveGroup.class)
     private String epi;
     @NotNull(message = "Descrição do EPI é obrigatório.", groups = SaveGroup.class)
-    @Size(min = 1, max = 4000, message = "A descrição do EPI deve estar preenchido e possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
+    @Size(max = 4000, message = "A descrição do EPI deve possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
     private String descricao;
     private Boolean ativo;
     @ManyToOne

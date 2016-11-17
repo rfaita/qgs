@@ -20,6 +20,14 @@ insert into tipomaterial  (id, tipomaterial) values (1, 'Geral');
 insert into tipomaterial  (id, tipomaterial) values (2, 'Encanamento');
 insert into tipomaterial  (id, tipomaterial) values (3, 'Asfalto');
 
+insert into gruposervico  (id, gruposervico, ativo) values (1, 'grupo1', true);
+insert into gruposervico  (id, gruposervico, ativo) values (2, 'grupo2', true);
+insert into gruposervico  (id, gruposervico, ativo) values (3, 'grupo3', false);
+
+insert into centrocusto  (id, centrocusto, ativo) values (1, 'centrocusto1', true);
+insert into centrocusto  (id, centrocusto, ativo) values (2, 'centrocusto2', true);
+insert into centrocusto  (id, centrocusto, ativo) values (3, 'centrocusto3', false);
+
 insert into tiporubrica  (id, tiporubrica) values (1, 'Tipo 1');
 insert into tiporubrica  (id, tiporubrica) values (2, 'Tipo 2');
 insert into tiporubrica  (id, tiporubrica) values (3, 'Tipo 3');
@@ -29,6 +37,11 @@ insert into tiposervico  (id, tiposervico) values (1, 'Geral');
 insert into tiposervico  (id, tiposervico) values (2, 'Operacional');
 insert into tiposervico  (id, tiposervico) values (3, 'Comercial');
 insert into tiposervico  (id, tiposervico) values (4, 'Grandes Clientes');
+
+insert into tipodepartamento  (id, tipodepartamento,idtiposervicoatendido,idempresa,ativo) values (1, 'tipo1', 1,1,true);
+insert into tipodepartamento  (id, tipodepartamento,idtiposervicoatendido,idempresa,ativo) values (2, 'tipo2', 2,1,true);
+insert into tipodepartamento  (id, tipodepartamento,idtiposervicoatendido,idempresa,ativo) values (3, 'tipo3', 3,1,false);
+insert into tipodepartamento  (id, tipodepartamento,idtiposervicoatendido,idempresa,ativo) values (4, 'tipo4', 4,2,true);
 
 insert into tipoatributo(id, tipoatributo,tipoDado) values (1, 'Textual', 0);
 insert into tipoatributo(id, tipoatributo,tipoDado) values (2, 'Númerico',1);

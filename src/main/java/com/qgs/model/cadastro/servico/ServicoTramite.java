@@ -14,39 +14,23 @@ public class ServicoTramite implements Serializable {
     @Id
     @SequenceGenerator(name = "seqServicoTramite", sequenceName = "seqServicoTramite", initialValue = 1000, allocationSize = 100)
     @GeneratedValue(generator = "seqServicoTramite")
-    private Integer id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "idservico")
     private Servico servico;
     private Boolean permiteEncerrar;
-    private Boolean enviarMobile;
+    private Boolean enviarAplicativoMovel;
     private Boolean tramiteInicial;
     @ManyToOne
     @JoinColumn(name = "idtipoDepartamentoTramiteInicial")
     private TipoDepartamento tipoDepartamentoTramiteInicial;
 
-    public Boolean getEnviarMobile() {
-        return enviarMobile;
-    }
-
-    public void setEnviarMobile(Boolean enviarMobile) {
-        this.enviarMobile = enviarMobile;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public Boolean getPermiteEncerrar() {
-        return permiteEncerrar;
-    }
-
-    public void setPermiteEncerrar(Boolean permiteEncerrar) {
-        this.permiteEncerrar = permiteEncerrar;
     }
 
     public Servico getServico() {
@@ -57,12 +41,20 @@ public class ServicoTramite implements Serializable {
         this.servico = servico;
     }
 
-    public TipoDepartamento getTipoDepartamentoTramiteInicial() {
-        return tipoDepartamentoTramiteInicial;
+    public Boolean getPermiteEncerrar() {
+        return permiteEncerrar;
     }
 
-    public void setTipoDepartamentoTramiteInicial(TipoDepartamento tipoDepartamentoTramiteInicial) {
-        this.tipoDepartamentoTramiteInicial = tipoDepartamentoTramiteInicial;
+    public void setPermiteEncerrar(Boolean permiteEncerrar) {
+        this.permiteEncerrar = permiteEncerrar;
+    }
+
+    public Boolean getEnviarAplicativoMovel() {
+        return enviarAplicativoMovel;
+    }
+
+    public void setEnviarAplicativoMovel(Boolean enviarAplicativoMovel) {
+        this.enviarAplicativoMovel = enviarAplicativoMovel;
     }
 
     public Boolean getTramiteInicial() {
@@ -72,4 +64,13 @@ public class ServicoTramite implements Serializable {
     public void setTramiteInicial(Boolean tramiteInicial) {
         this.tramiteInicial = tramiteInicial;
     }
+
+    public TipoDepartamento getTipoDepartamentoTramiteInicial() {
+        return tipoDepartamentoTramiteInicial;
+    }
+
+    public void setTipoDepartamentoTramiteInicial(TipoDepartamento tipoDepartamentoTramiteInicial) {
+        this.tipoDepartamentoTramiteInicial = tipoDepartamentoTramiteInicial;
+    }
+
 }

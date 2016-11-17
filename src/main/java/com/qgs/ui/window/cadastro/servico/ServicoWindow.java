@@ -6,17 +6,22 @@ import com.qgs.model.cadastro.Atributo;
 import com.qgs.model.cadastro.EPI;
 import com.qgs.model.cadastro.Material;
 import com.qgs.model.cadastro.Prioridade;
+import com.qgs.model.cadastro.depto.TipoDepartamento;
+import com.qgs.model.cadastro.rubrica.CentroCusto;
 import com.qgs.model.cadastro.rubrica.Rubrica;
+import com.qgs.model.cadastro.servico.GrupoServico;
 import com.qgs.model.cadastro.servico.Servico;
 import com.qgs.model.cadastro.servico.ServicoAssociado;
 import com.qgs.model.cadastro.servico.ServicoAtributo;
 import com.qgs.model.cadastro.servico.ServicoCusto;
 import com.qgs.model.cadastro.servico.ServicoMaterial;
+import com.qgs.model.cadastro.servico.ServicoTramite;
 import com.qgs.model.cadastro.servico.TipoServico;
 import com.qgs.service.ListAllService;
 import com.qgs.service.cadastro.servico.ServicoService;
 import com.qgs.service.secutiry.SecurityUtils;
 import com.qgs.ui.QGSUI;
+import com.qgs.ui.util.table.CheckBoxColumnGenerator;
 import com.qgs.ui.util.validator.DoubleValidator;
 import com.qgs.ui.util.validator.PositiveIntegerValidator;
 import com.qgs.ui.view.cadastro.servico.ServicoView;
@@ -47,15 +52,21 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
     private TextField txtPrazoClienteHoras;
     private TextField txtPrazoAlertaHoras;
     private TextArea txtDescricao;
+    private TextArea txtProcedimento;
     private CheckBox ckAtivo;
+    private CheckBox ckEncerramentoAutomatico;
     private CheckBox ckNaoAdmiteDuplicacao;
     private CheckBox ckExigeCPF;
     private CheckBox ckExigeRG;
     private CheckBox ckConsiderarFinalDeSemanaNoPrazo;
     private BeanContainer<Integer, TipoServico> bcTipoServico;
     private ComboBox cmbTipoServico;
+    private BeanContainer<Integer, GrupoServico> bcGrupoServico;
+    private ComboBox cmbGrupoServico;
     private BeanContainer<Integer, Prioridade> bcPrioridade;
     private ComboBox cmbPrioridade;
+    private BeanContainer<Integer, CentroCusto> bcCentroCusto;
+    private ComboBox cmbCentroCusto;
 
     private BeanContainer<Integer, EPI> bcEPI;
     private ComboBox cmbEPI;
@@ -104,6 +115,17 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
     private Table tbServicoCusto;
     private Long indexServicoCusto = -1L;
 
+    private BeanContainer<Integer, TipoDepartamento> bcTipoDepartamento;
+    private ComboBox cmbTipoDepartamento;
+    private CheckBox ckPermiteEncerrar;
+    private CheckBox ckEnviarAplicativoMovel;
+    private CheckBox ckTramiteInicial;
+    private Button btAddTramite;
+    private Button btDelTramite;
+    private BeanContainer<Long, ServicoTramite> bcServicoTramite;
+    private Table tbServicoTramite;
+    private Long indexServicoTramite = -1L;
+
     @EJB
     private ServicoService servicoService;
     @EJB
@@ -127,13 +149,17 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         content.addComponent(getTxtId());
         content.addComponent(getTxtServico());
         content.addComponent(getTxtDescricao());
+        content.addComponent(getTxtProcedimento());
         content.addComponent(getCmbTipoServico());
+        content.addComponent(getCmbCentroCusto());
+        content.addComponent(getCmbGrupoServico());
         content.addComponent(getCmbPrioridade());
         content.addComponent(getTxtPrazoHoras());
         content.addComponent(getTxtPrazoClienteHoras());
         content.addComponent(getTxtPrazoAlertaHoras());
         content.addComponent(getCkConsiderarFinalDeSemanaNoPrazo());
         content.addComponent(getCkNaoAdmiteDuplicacao());
+        content.addComponent(getCkEncerramentoAutomatico());
 
         HorizontalLayout h = new HorizontalLayout(getCkExigeRG(), getCkExigeCPF());
         h.setWidth(100, Unit.PERCENTAGE);
@@ -147,6 +173,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         tabSheet.addTab(getAbaMaterial(), "Materiais");
         tabSheet.addTab(getAbaAssociado(), "Serviços Associados");
         tabSheet.addTab(getAbaCusto(), "Serviço Custo");
+        tabSheet.addTab(getAbaTramite(), "Serviço Tramite");
 
         VerticalLayout vl = new VerticalLayout(tabSheet, getBtSave());
 
@@ -251,6 +278,26 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         return content;
     }
 
+    private FormLayout getAbaTramite() {
+        FormLayout content = new FormLayout();
+        content.setSizeFull();
+        content.setMargin(new MarginInfo(true));
+        content.setSpacing(true);
+
+        content.addComponent(getCmbTipoDepartamento());
+        content.addComponent(getCkTramiteInicial());
+        content.addComponent(getCkEnviarAplicativoMovel());
+        content.addComponent(getCkPermiteEncerrar());
+
+        HorizontalLayout h = new HorizontalLayout(getBtAddTramite(), getBtDelTramite());
+        h.setWidth(100, Unit.PERCENTAGE);
+
+        content.addComponent(h);
+        content.addComponent(getTbServicoTramite());
+
+        return content;
+    }
+
     @Override
     protected void doLoadDados(Long id) {
         if (id != null && id > 0) {
@@ -261,11 +308,18 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             getTxtPrazoClienteHoras().setValue(getDado().getPrazoClienteHoras() + "");
             getTxtPrazoHoras().setValue(getDado().getPrazoHoras() + "");
             getTxtDescricao().setValue(getDado().getDescricao());
+            getTxtProcedimento().setValue(getDado().getProcedimento());
             if (getDado().getTipoServico() != null) {
                 getCmbTipoServico().setValue(getDado().getTipoServico().getId());
             }
             if (getDado().getPrioridade() != null) {
                 getCmbPrioridade().setValue(getDado().getPrioridade().getId());
+            }
+            if (getDado().getCentroCusto() != null) {
+                getCmbCentroCusto().setValue(getDado().getCentroCusto().getId());
+            }
+            if (getDado().getGrupoServico() != null) {
+                getCmbGrupoServico().setValue(getDado().getGrupoServico().getId());
             }
             getTxtServico().setValue(getDado().getServico());
             getCkAtivo().setValue(getDado().getAtivo());
@@ -273,11 +327,13 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             getCkExigeRG().setValue(getDado().getExigirRG());
             getCkExigeCPF().setValue(getDado().getExigirCPF());
             getCkNaoAdmiteDuplicacao().setValue(getDado().getNaoAdmiteDuplicacao());
+            getCkEncerramentoAutomatico().setValue(getDado().getEncerramentoAutomatico());
             getBcEPIServico().addAll(getDado().getEpis());
             getBcServicoAtributo().addAll(getDado().getAtributos());
             getBcServicoMaterial().addAll(getDado().getMateriais());
             getBcServicoAssociado().addAll(getDado().getAssociados());
             getBcServicoCusto().addAll(getDado().getCustos());
+            getBcServicoTramite().addAll(getDado().getTramites());
         }
     }
 
@@ -329,6 +385,15 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         return txtDescricao;
     }
 
+    private TextArea getTxtProcedimento() {
+        if (txtProcedimento == null) {
+            txtProcedimento = new TextArea("Prodecimento");
+            txtProcedimento.setWidth(100, Unit.PERCENTAGE);
+            txtProcedimento.setNullRepresentation("");
+        }
+        return txtProcedimento;
+    }
+
     private BeanContainer<Integer, TipoServico> getBcTipoServico() {
         if (bcTipoServico == null) {
             bcTipoServico = new BeanContainer<Integer, TipoServico>(TipoServico.class);
@@ -343,6 +408,22 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             bcPrioridade.setBeanIdResolver((Prioridade bean) -> bean.getId());
         }
         return bcPrioridade;
+    }
+
+    private BeanContainer<Integer, CentroCusto> getBcCentroCusto() {
+        if (bcCentroCusto == null) {
+            bcCentroCusto = new BeanContainer<Integer, CentroCusto>(CentroCusto.class);
+            bcCentroCusto.setBeanIdResolver((CentroCusto bean) -> bean.getId());
+        }
+        return bcCentroCusto;
+    }
+
+    private BeanContainer<Integer, GrupoServico> getBcGrupoServico() {
+        if (bcGrupoServico == null) {
+            bcGrupoServico = new BeanContainer<Integer, GrupoServico>(GrupoServico.class);
+            bcGrupoServico.setBeanIdResolver((GrupoServico bean) -> bean.getId());
+        }
+        return bcGrupoServico;
     }
 
     private ComboBox getCmbTipoServico() {
@@ -373,6 +454,34 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         return cmbPrioridade;
     }
 
+    private ComboBox getCmbCentroCusto() {
+        if (cmbCentroCusto == null) {
+            cmbCentroCusto = new ComboBox("Centro de custo");
+            cmbCentroCusto.setInputPrompt("Informe o centro de custo...");
+            cmbCentroCusto.setContainerDataSource(getBcCentroCusto());
+            cmbCentroCusto.setWidth(100, Unit.PERCENTAGE);
+            cmbCentroCusto.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
+            cmbCentroCusto.setItemCaptionPropertyId("centroCusto");
+            cmbCentroCusto.setImmediate(true);
+            cmbCentroCusto.setRequired(true);
+        }
+        return cmbCentroCusto;
+    }
+
+    private ComboBox getCmbGrupoServico() {
+        if (cmbGrupoServico == null) {
+            cmbGrupoServico = new ComboBox("Grupo serviço");
+            cmbGrupoServico.setInputPrompt("Informe o grupo serviço...");
+            cmbGrupoServico.setContainerDataSource(getBcGrupoServico());
+            cmbGrupoServico.setWidth(100, Unit.PERCENTAGE);
+            cmbGrupoServico.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
+            cmbGrupoServico.setItemCaptionPropertyId("grupoServico");
+            cmbGrupoServico.setImmediate(true);
+            cmbGrupoServico.setRequired(true);
+        }
+        return cmbGrupoServico;
+    }
+
     private CheckBox getCkAtivo() {
         if (ckAtivo == null) {
             ckAtivo = new CheckBox("Ativo?");
@@ -385,6 +494,13 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             ckNaoAdmiteDuplicacao = new CheckBox("Não admite duplicação?");
         }
         return ckNaoAdmiteDuplicacao;
+    }
+
+    private CheckBox getCkEncerramentoAutomatico() {
+        if (ckEncerramentoAutomatico == null) {
+            ckEncerramentoAutomatico = new CheckBox("Encerramento automático?");
+        }
+        return ckEncerramentoAutomatico;
     }
 
     private CheckBox getCkExigeRG() {
@@ -591,6 +707,8 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
                 }
                 return "";
             });
+
+            tbServicoAtributo.addGeneratedColumn("obrigatorio", new CheckBoxColumnGenerator("obrigatorio", true, null));
 
             tbServicoAtributo.setVisibleColumns("atributo", "obrigatorio");
             tbServicoAtributo.setColumnExpandRatio("atributo", 1);
@@ -1039,6 +1157,134 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         return ogTipoCusto;
     }
 
+    private BeanContainer<Long, ServicoTramite> getBcServicoTramite() {
+        if (bcServicoTramite == null) {
+            bcServicoTramite = new BeanContainer<Long, ServicoTramite>(ServicoTramite.class);
+            bcServicoTramite.setBeanIdResolver((ServicoTramite bean) -> bean.getId());
+        }
+        return bcServicoTramite;
+    }
+
+    private Table getTbServicoTramite() {
+        if (tbServicoTramite == null) {
+            tbServicoTramite = new Table();
+            tbServicoTramite.setWidth(100, Unit.PERCENTAGE);
+            tbServicoTramite.setHeight(300, Unit.PIXELS);
+            tbServicoTramite.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
+            tbServicoTramite.addStyleName(ValoTheme.TABLE_COMPACT);
+            tbServicoTramite.setSelectable(true);
+
+            tbServicoTramite.setColumnCollapsingAllowed(true);
+            tbServicoTramite.setColumnReorderingAllowed(true);
+            tbServicoTramite.setContainerDataSource(getBcServicoTramite());
+            tbServicoTramite.setSortAscending(false);
+
+            tbServicoTramite.addGeneratedColumn("tipoDepartamentoTramiteInicial", (Table source, Object itemId, Object columnId) -> {
+                Property<TipoDepartamento> prop = source.getItem(itemId).getItemProperty(columnId);
+                if (prop.getType().equals(TipoDepartamento.class)) {
+                    return prop.getValue().getTipoDepartamento();
+                }
+                return "";
+            });
+
+            tbServicoTramite.addGeneratedColumn("permiteEncerrar", new CheckBoxColumnGenerator("permiteEncerrar", true, null));
+            tbServicoTramite.addGeneratedColumn("enviarAplicativoMovel", new CheckBoxColumnGenerator("enviarAplicativoMovel", true, null));
+            tbServicoTramite.addGeneratedColumn("tramiteInicial", new CheckBoxColumnGenerator("tramiteInicial", true, null));
+
+            tbServicoTramite.setVisibleColumns("tipoDepartamentoTramiteInicial", "tramiteInicial", "enviarAplicativoMovel", "permiteEncerrar");
+            tbServicoTramite.setColumnHeaders("Tipo departamento inicial", "Tramite inicial", "Enviar aplicativo móvel", "Permite encerrar");
+
+            tbServicoTramite.setImmediate(true);
+        }
+
+        return tbServicoTramite;
+    }
+
+    private CheckBox getCkTramiteInicial() {
+        if (ckTramiteInicial == null) {
+            ckTramiteInicial = new CheckBox("Tramite inicial?");
+        }
+        return ckTramiteInicial;
+    }
+
+    private CheckBox getCkEnviarAplicativoMovel() {
+        if (ckEnviarAplicativoMovel == null) {
+            ckEnviarAplicativoMovel = new CheckBox("Enviar aplicativo móvel?");
+        }
+        return ckEnviarAplicativoMovel;
+    }
+
+    private CheckBox getCkPermiteEncerrar() {
+        if (ckPermiteEncerrar == null) {
+            ckPermiteEncerrar = new CheckBox("Permite encerrar?");
+        }
+        return ckPermiteEncerrar;
+    }
+
+    private BeanContainer<Integer, TipoDepartamento> getBcTipoDepartamento() {
+        if (bcTipoDepartamento == null) {
+            bcTipoDepartamento = new BeanContainer<Integer, TipoDepartamento>(TipoDepartamento.class);
+            bcTipoDepartamento.setBeanIdResolver((TipoDepartamento bean) -> bean.getId());
+        }
+        return bcTipoDepartamento;
+    }
+
+    private ComboBox getCmbTipoDepartamento() {
+        if (cmbTipoDepartamento == null) {
+            cmbTipoDepartamento = new ComboBox("Tipo departamento");
+            cmbTipoDepartamento.setInputPrompt("Informe o tipo departamento...");
+            cmbTipoDepartamento.setContainerDataSource(getBcTipoDepartamento());
+            cmbTipoDepartamento.setWidth(100, Unit.PERCENTAGE);
+            cmbTipoDepartamento.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
+            cmbTipoDepartamento.setItemCaptionPropertyId("tipoDepartamento");
+            cmbTipoDepartamento.setImmediate(true);
+        }
+        return cmbTipoDepartamento;
+    }
+
+    private Button getBtAddTramite() {
+        if (btAddTramite == null) {
+            btAddTramite = new Button("Adicionar");
+            btAddTramite.setIcon(FontAwesome.PLUS);
+            btAddTramite.addClickListener((Button.ClickEvent event) -> {
+                if (getCmbTipoDepartamento().getValue() == null) {
+                    QGSUI.showWarn("Informe o tipo departamento.");
+                    return;
+                }
+                ServicoTramite sa = new ServicoTramite();
+                sa.setTipoDepartamentoTramiteInicial(getBcTipoDepartamento().getItem(getCmbTipoDepartamento().getValue()).getBean());
+                sa.setEnviarAplicativoMovel(getCkEnviarAplicativoMovel().getValue());
+                sa.setPermiteEncerrar(getCkPermiteEncerrar().getValue());
+                sa.setTramiteInicial(getCkTramiteInicial().getValue());
+                sa.setId(indexServicoTramite--);
+                getBcServicoTramite().addBean(sa);
+                getCmbTipoDepartamento().setValue(null);
+                getCkEnviarAplicativoMovel().setValue(Boolean.FALSE);
+                getCkPermiteEncerrar().setValue(Boolean.FALSE);
+                getCkTramiteInicial().setValue(Boolean.FALSE);
+
+            });
+        }
+        return btAddTramite;
+    }
+
+    private Button getBtDelTramite() {
+        if (btDelTramite == null) {
+            btDelTramite = new Button("Remover");
+            btDelTramite.setIcon(FontAwesome.MINUS);
+            btDelTramite.addClickListener((Button.ClickEvent event) -> {
+                if (getTbServicoTramite().getValue() != null) {
+                    ServicoTramite o = getBcServicoTramite().getItem(getTbServicoTramite().getValue()).getBean();
+                    getBcServicoTramite().removeItem(o.getId());
+                } else {
+                    QGSUI.showWarn("Selecione o que deseja remover.");
+                }
+
+            });
+        }
+        return btDelTramite;
+    }
+
     @Override
     protected void doSave() {
 
@@ -1059,10 +1305,12 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         }
         getDado().setServico(getTxtServico().getValue());
         getDado().setDescricao(getTxtDescricao().getValue());
+        getDado().setProcedimento(getTxtProcedimento().getValue());
         getDado().setAtivo(getCkAtivo().getValue());
         getDado().setExigirRG(getCkExigeRG().getValue());
         getDado().setExigirCPF(getCkExigeCPF().getValue());
         getDado().setNaoAdmiteDuplicacao(getCkNaoAdmiteDuplicacao().getValue());
+        getDado().setEncerramentoAutomatico(getCkEncerramentoAutomatico().getValue());
         getDado().setConsiderarFinalDeSemanaNoPrazo(getCkConsiderarFinalDeSemanaNoPrazo().getValue());
         getDado().setPrazoAlertaHoras(Validation.validInteger(getTxtPrazoAlertaHoras().getValue()));
         getDado().setPrazoClienteHoras(Validation.validInteger(getTxtPrazoClienteHoras().getValue()));
@@ -1076,6 +1324,16 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             getDado().setPrioridade(getBcPrioridade().getItem(getCmbPrioridade().getValue()).getBean());
         } else {
             getDado().setPrioridade(null);
+        }
+        if (getCmbCentroCusto().getValue() != null) {
+            getDado().setCentroCusto(getBcCentroCusto().getItem(getCmbCentroCusto().getValue()).getBean());
+        } else {
+            getDado().setCentroCusto(null);
+        }
+        if (getCmbGrupoServico().getValue() != null) {
+            getDado().setGrupoServico(getBcGrupoServico().getItem(getCmbGrupoServico().getValue()).getBean());
+        } else {
+            getDado().setGrupoServico(null);
         }
 
         getDado().setEpis(new ArrayList<EPI>());
@@ -1118,6 +1376,15 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             }
             getDado().getCustos().add(sc);
         }
+        getDado().setTramites(new ArrayList<ServicoTramite>());
+        for (Long id : getBcServicoTramite().getItemIds()) {
+            ServicoTramite st = getBcServicoTramite().getItem(id).getBean();
+            if (st.getId() != null && st.getId() < 0) {
+                st.setId(null);
+                st.setServico(getDado());
+            }
+            getDado().getTramites().add(st);
+        }
 
         try {
 
@@ -1135,12 +1402,15 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
     protected void doInitiate() {
         getBcTipoServico().addAll(listAllService.findAll(TipoServico.class));
         getBcPrioridade().addAll(listAllService.findAll(Prioridade.class));
+        getBcGrupoServico().addAll(listAllService.findAll(GrupoServico.class));
+        getBcCentroCusto().addAll(listAllService.findAll(CentroCusto.class));
         getBcEPI().addAll(listAllService.findAllByParam(EPI.class, "idEmpresa", securityUtils.getEmpresa().getId()));
         getBcAtributo().addAll(listAllService.findAllByParam(Atributo.class, "idEmpresa", securityUtils.getEmpresa().getId()));
         getBcMaterial().addAll(listAllService.findAllByParam(Material.class, "idEmpresa", securityUtils.getEmpresa().getId()));
         getBcServico().addAll(listAllService.findAllByParam(Servico.class, "idEmpresa", securityUtils.getEmpresa().getId()));
         getBcCriterioSelecaoLocalidade().addAll(Arrays.asList(CriterioSelecaoLocalidadeEnum.values()));
         getBcRubrica().addAll(listAllService.findAllByParam(Rubrica.class, "idEmpresa", securityUtils.getEmpresa().getId()));
+        getBcTipoDepartamento().addAll(listAllService.findAllByParam(TipoDepartamento.class, "idEmpresa", securityUtils.getEmpresa().getId()));
         getBcTipoCusto().addAll(Arrays.asList(TipoCustomEnum.values()));
     }
 

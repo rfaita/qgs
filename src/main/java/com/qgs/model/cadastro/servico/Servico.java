@@ -18,7 +18,10 @@ import javax.validation.groups.Default;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Servico.findAllByParam", query = "SELECT o FROM Servico o JOIN FETCH o.empresa WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
+    @NamedQuery(name = "Servico.findAllByParam", query = "SELECT o FROM Servico o "
+            + "\n JOIN FETCH o.empresa "
+            + "\n JOIN FETCH o.tipoServico "
+            + "\n WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
 })
 public class Servico extends BaseBean<Long> {
 
@@ -29,10 +32,13 @@ public class Servico extends BaseBean<Long> {
     @NotNull(message = "Serviço é obrigatório.", groups = SaveGroup.class)
     @Size(min = 1, max = 100, message = "O serviço deve estar preenchido e possuir no máximo 100 caractéres.", groups = SaveGroup.class)
     private String servico;
+    @Size(max = 4000, message = "A decrição deve possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
     private String descricao;
+    @Size(max = 4000, message = "O procedimento deve possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
     private String procedimento;
     @ManyToOne
     @JoinColumn(name = "idgruposervico")
+    @NotNull(message = "Grupo serviço é obrigatório.", groups = SaveGroup.class)
     private GrupoServico grupoServico;
     @NotNull(message = "Prazo(Horas) é obrigatório.", groups = SaveGroup.class)
     @Min(value = 1, message = "Prazo(Horas) deve ser maior que zero.", groups = SaveGroup.class)
@@ -55,8 +61,8 @@ public class Servico extends BaseBean<Long> {
     private Boolean exigirRG;
     @ManyToOne
     @JoinColumn(name = "idcentrocusto")
+    @NotNull(message = "Centro de custo é obrigatório.", groups = SaveGroup.class)
     private CentroCusto centroCusto;
-    private Boolean enviarAplicativoMovel;
     @OneToMany(targetEntity = ServicoAtributo.class, mappedBy = "servico", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServicoAtributo> atributos;
     @ManyToMany(cascade = CascadeType.MERGE)
@@ -217,14 +223,6 @@ public class Servico extends BaseBean<Long> {
 
     public void setCentroCusto(CentroCusto centroCusto) {
         this.centroCusto = centroCusto;
-    }
-
-    public Boolean getEnviarAplicativoMovel() {
-        return enviarAplicativoMovel;
-    }
-
-    public void setEnviarAplicativoMovel(Boolean enviarAplicativoMovel) {
-        this.enviarAplicativoMovel = enviarAplicativoMovel;
     }
 
     public List<ServicoAtributo> getAtributos() {

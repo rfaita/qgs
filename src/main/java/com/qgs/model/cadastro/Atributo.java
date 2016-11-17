@@ -16,7 +16,10 @@ import javax.validation.groups.Default;
 @NamedQueries({
     @NamedQuery(name = "Atributo.findAll", query = "SELECT p FROM Atributo p")
     ,
-    @NamedQuery(name = "Atributo.findAllByParam", query = "SELECT o FROM Atributo o JOIN FETCH o.empresa WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
+    @NamedQuery(name = "Atributo.findAllByParam", query = "SELECT o FROM Atributo o "
+            + "\n JOIN FETCH o.empresa "
+            + "\n JOIN FETCH o.tipoAtributo "
+            + "\n WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
 })
 public class Atributo extends BaseBean<Integer> {
 
@@ -28,7 +31,7 @@ public class Atributo extends BaseBean<Integer> {
     @Size(min = 1, max = 50, message = "O atributo deve estar preenchido e possuir no máximo 50 caractéres.", groups = SaveGroup.class)
     private String atributo;
     @NotNull(message = "Descrição do atributo é obrigatório.", groups = SaveGroup.class)
-    @Size(min = 1, max = 4000, message = "A descrição do atributo deve estar preenchido e possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
+    @Size(max = 4000, message = "A descrição do atributo deve possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
     private String descricao;
     private Boolean ativo;
     @ManyToOne

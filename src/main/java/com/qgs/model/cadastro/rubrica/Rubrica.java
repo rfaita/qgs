@@ -13,7 +13,10 @@ import javax.validation.groups.Default;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "Rubrica.findAllByParam", query = "SELECT o FROM Rubrica o JOIN FETCH o.empresa WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
+    @NamedQuery(name = "Rubrica.findAllByParam", query = "SELECT o FROM Rubrica o "
+            + "\n JOIN FETCH o.empresa "
+            + "\n JOIN FETCH o.tipoRubrica "
+            + "\n WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
 })
 public class Rubrica extends BaseBean<Integer> {
 
@@ -25,7 +28,7 @@ public class Rubrica extends BaseBean<Integer> {
     @NotNull(message = "Rubrica é obrigatório.", groups = SaveGroup.class)
     @Size(min = 1, max = 100, message = "A rubrica deve estar preenchido e possuir no máximo 100 caractéres.", groups = SaveGroup.class)
     private String rubrica;
-    @Size(min = 1, max = 4000, message = "A descrição deve estar preenchido e possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
+    @Size(max = 4000, message = "A descrição deve possuir no máximo 4000 caractéres.", groups = SaveGroup.class)
     private String descricao;
     @NotNull(message = "Rubrica resumida é obrigatório.", groups = SaveGroup.class)
     @Size(min = 1, max = 50, message = "A rubrica resumida deve estar preenchido e possuir no máximo 50 caractéres.", groups = SaveGroup.class)

@@ -27,6 +27,7 @@ import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 
@@ -95,6 +96,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
     private SecurityUtils securityUtils;
 
     public ServicoWindow() {
+
         super("servicowindow", "Gestão de Serviço");
 
         TabSheet tabSheet = new TabSheet();
@@ -191,6 +193,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
 
         return content;
     }
+
     private FormLayout getAbaAssociado() {
         FormLayout content = new FormLayout();
         content.setSizeFull();
@@ -233,6 +236,8 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             getCkNaoAdmiteDuplicacao().setValue(getDado().getNaoAdmiteDuplicacao());
             getBcEPIServico().addAll(getDado().getEpis());
             getBcServicoAtributo().addAll(getDado().getAtributos());
+            getBcServicoMaterial().addAll(getDado().getMateriais());
+            getBcServicoAssociado().addAll(getDado().getAssociados());
         }
     }
 
@@ -746,7 +751,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         if (cmbServico == null) {
             cmbServico = new ComboBox("Serviço");
             cmbServico.setInputPrompt("Informe o serviço...");
-            cmbServico.setContainerDataSource(getBcServicoAssociado());
+            cmbServico.setContainerDataSource(getBcServico());
             cmbServico.setWidth(100, Unit.PERCENTAGE);
             cmbServico.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
             cmbServico.setItemCaptionPropertyId("servico");
@@ -759,7 +764,7 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         if (cmbCriterioSelecaoLocalidade == null) {
             cmbCriterioSelecaoLocalidade = new ComboBox("Critério Localidade");
             cmbCriterioSelecaoLocalidade.setInputPrompt("Informe o critério...");
-            cmbCriterioSelecaoLocalidade.setContainerDataSource(getBcServicoAssociado());
+            cmbCriterioSelecaoLocalidade.setContainerDataSource(getBcCriterioSelecaoLocalidade());
             cmbCriterioSelecaoLocalidade.setWidth(100, Unit.PERCENTAGE);
             cmbCriterioSelecaoLocalidade.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
             cmbCriterioSelecaoLocalidade.setItemCaptionPropertyId("criterio");
@@ -782,6 +787,13 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             tbServicoAssociado.setContainerDataSource(getBcServicoAssociado());
             tbServicoAssociado.setSortAscending(false);
 
+            tbServicoAssociado.addGeneratedColumn("servico", (Table source, Object itemId, Object columnId) -> {
+                Property<Servico> prop = source.getItem(itemId).getItemProperty(columnId);
+                if (prop.getType().equals(Servico.class)) {
+                    return prop.getValue().getServico();
+                }
+                return "";
+            });
             tbServicoAssociado.addGeneratedColumn("criterioSelecaoLocalidade", (Table source, Object itemId, Object columnId) -> {
                 Property<CriterioSelecaoLocalidadeEnum> prop = source.getItem(itemId).getItemProperty(columnId);
                 if (prop.getType().equals(CriterioSelecaoLocalidadeEnum.class)) {
@@ -854,6 +866,24 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
             }
             getDado().getAtributos().add(sa);
         }
+        getDado().setAssociados(new ArrayList<ServicoAssociado>());
+        for (Long id : getBcServicoAssociado().getItemIds()) {
+            ServicoAssociado sa = getBcServicoAssociado().getItem(id).getBean();
+            if (sa.getId() != null && sa.getId() < 0) {
+                sa.setId(null);
+                sa.setServico(getDado());
+            }
+            getDado().getAssociados().add(sa);
+        }
+        getDado().setMateriais(new ArrayList<ServicoMaterial>());
+        for (Long id : getBcServicoMaterial().getItemIds()) {
+            ServicoMaterial sm = getBcServicoMaterial().getItem(id).getBean();
+            if (sm.getId() != null && sm.getId() < 0) {
+                sm.setId(null);
+                sm.setServico(getDado());
+            }
+            getDado().getMateriais().add(sm);
+        }
 
         try {
 
@@ -873,6 +903,9 @@ public class ServicoWindow extends BaseWindow<Long, Servico> {
         getBcPrioridade().addAll(listAllService.findAll(Prioridade.class));
         getBcEPI().addAll(listAllService.findAllByParam(EPI.class, "idEmpresa", securityUtils.getEmpresa().getId()));
         getBcAtributo().addAll(listAllService.findAllByParam(Atributo.class, "idEmpresa", securityUtils.getEmpresa().getId()));
+        getBcMaterial().addAll(listAllService.findAllByParam(Material.class, "idEmpresa", securityUtils.getEmpresa().getId()));
+        getBcServico().addAll(listAllService.findAllByParam(Servico.class, "idEmpresa", securityUtils.getEmpresa().getId()));
+        getBcCriterioSelecaoLocalidade().addAll(Arrays.asList(CriterioSelecaoLocalidadeEnum.values()));
     }
 
     @Override

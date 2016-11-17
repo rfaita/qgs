@@ -2,9 +2,7 @@ package com.qgs.model.cadastro.servico;
 
 import com.qgs.model.BaseBean;
 import com.qgs.model.Empresa;
-import com.qgs.model.cadastro.Atributo;
 import com.qgs.model.cadastro.EPI;
-import com.qgs.model.cadastro.Material;
 import com.qgs.model.cadastro.Prioridade;
 import com.qgs.model.cadastro.rubrica.CentroCusto;
 import java.util.List;
@@ -19,6 +17,9 @@ import javax.validation.groups.Default;
  * @author rafael
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Servico.findAllByParam", query = "SELECT o FROM Servico o JOIN FETCH o.empresa WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
+})
 public class Servico extends BaseBean<Long> {
 
     @Id

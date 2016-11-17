@@ -12,6 +12,11 @@ import javax.validation.groups.Default;
  * @author rafael
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Material.findAll", query = "SELECT p FROM Material p")
+    ,
+    @NamedQuery(name = "Material.findAllByParam", query = "SELECT o FROM Material o JOIN FETCH o.empresa WHERE o.empresa.id = :idEmpresa AND o.ativo = true")
+})
 public class Material extends BaseBean<Integer> {
 
     @Id

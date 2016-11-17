@@ -45,6 +45,19 @@ insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo)
 insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (4, 'teste4', true, 1, 1,4);
 insert into atributo(id, atributo, ativo, nrMedicoes, idempresa, idtipoatributo) values (5, 'teste5', true, 1, 2,4);
 
+insert into material(id, material, ativo,  idempresa, idtipomaterial) values (1, 'teste1', true,  1,1);
+insert into material(id, material, ativo,  idempresa, idtipomaterial) values (2, 'teste2', true,  1,2);
+insert into material(id, material, ativo,  idempresa, idtipomaterial) values (3, 'teste3', true,  1,3);
+insert into material(id, material, ativo,  idempresa, idtipomaterial) values (4, 'teste4', true,  1,1);
+insert into material(id, material, ativo,  idempresa, idtipomaterial) values (5, 'teste5', true,  2,2);
+
+insert into servico(id, servico, ativo,  idempresa, idtiposervico) values (1, 'teste1', true,  1,1);
+insert into servico(id, servico, ativo,  idempresa, idtiposervico) values (2, 'teste2', true,  1,2);
+insert into servico(id, servico, ativo,  idempresa, idtiposervico) values (3, 'teste3', true,  1,3);
+insert into servico(id, servico, ativo,  idempresa, idtiposervico) values (4, 'teste4', true,  2,1);
+insert into servico(id, servico, ativo,  idempresa, idtiposervico) values (5, 'teste5', true,  2,2);
+insert into servico(id, servico, ativo,  idempresa, idtiposervico) values (6, 'teste6', true,  3,3);
+
 insert into pais(id, pais, abrev) values (1, 'Brasil', 'BR');
 
 insert into uf (id, descricao, uf, idpais) values (1,'Acre','AC',1);

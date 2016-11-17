@@ -51,6 +51,10 @@ public class ServicoService {
         Servico ret = findById(id);
         ret.getEpis().size();
         ret.getAtributos().size();
+        ret.getAssociados().size();
+        ret.getMateriais().size();
+        ret.getCustos().size();
+        ret.getTramites().size();
         return ret;
     }
 

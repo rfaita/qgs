@@ -11,6 +11,7 @@ import com.qgs.ui.window.cadastro.equipe.EquipeWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -32,7 +33,7 @@ public final class EquipeView extends BaseView<Long, Equipe> {
     private EquipeWindow matWindow;
 
     public EquipeView() {
-        super("equipe", "Cadastro de Equipe");
+        super("equipe", FontAwesome.GROUP, "Cadastro de Equipe");
 
         getTable().addGeneratedColumn("tipoEquipe", (Table source, Object itemId, Object columnId) -> {
             Property<TipoEquipe> prop = source.getItem(itemId).getItemProperty(columnId);

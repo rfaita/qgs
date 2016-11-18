@@ -8,6 +8,7 @@ import com.qgs.ui.window.base.BaseWindow;
 import com.qgs.ui.window.ordemservico.FormaAtendimentoWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -25,7 +26,7 @@ public final class FormaAtendimentoView extends BaseView<Integer, FormaAtendimen
     private FormaAtendimentoWindow atrWindow;
 
     public FormaAtendimentoView() {
-        super("formaatendimento", "Cadastro de Forma Atendimento");
+        super("formaatendimento", FontAwesome.TAGS, "Cadastro de Forma Atendimento");
 
     }
 

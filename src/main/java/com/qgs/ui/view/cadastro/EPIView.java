@@ -8,6 +8,7 @@ import com.qgs.ui.window.base.BaseWindow;
 import com.qgs.ui.window.cadastro.EPIWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -25,7 +26,7 @@ public final class EPIView extends BaseView<Integer, EPI> {
     private EPIWindow epiWindow;
 
     public EPIView() {
-        super("epi", "Cadastro de EPI");
+        super("epi", FontAwesome.SHIELD, "Cadastro de EPI");
     }
 
     private CheckBox getCkInativos() {

@@ -11,6 +11,7 @@ import com.qgs.ui.window.cadastro.depto.TipoDepartamentoWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -32,7 +33,7 @@ public final class TipoDepartamentoView extends BaseView<Integer, TipoDepartamen
     private TipoDepartamentoWindow tipoDeptoWindow;
 
     public TipoDepartamentoView() {
-        super("tipoDepto", "Cadastro de Tipo Departamento");
+        super("tipoDepto", FontAwesome.COG, "Cadastro de Tipo Departamento");
 
         getTable().addGeneratedColumn("tipoServicoAtendido", (Table source, Object itemId, Object columnId) -> {
             Property<TipoServico> prop = source.getItem(itemId).getItemProperty(columnId);

@@ -11,6 +11,7 @@ import com.qgs.ui.window.cadastro.AtributoWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -32,7 +33,7 @@ public final class AtributoView extends BaseView<Integer, Atributo> {
     private AtributoWindow atrWindow;
 
     public AtributoView() {
-        super("atributo", "Cadastro de Atributo");
+        super("atributo", FontAwesome.CUBES, "Cadastro de Atributo");
 
         getTable().addGeneratedColumn("tipoAtributo", (Table source, Object itemId, Object columnId) -> {
             Property<TipoAtributo> prop = source.getItem(itemId).getItemProperty(columnId);

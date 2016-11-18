@@ -11,6 +11,7 @@ import com.qgs.ui.window.cadastro.MaterialWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -32,7 +33,7 @@ public final class MaterialView extends BaseView<Integer, Material> {
     private MaterialWindow matWindow;
 
     public MaterialView() {
-        super("material", "Cadastro de Material");
+        super("material", FontAwesome.FLASK, "Cadastro de Material");
 
         getTable().addGeneratedColumn("tipoMaterial", (Table source, Object itemId, Object columnId) -> {
             Property<TipoMaterial> prop = source.getItem(itemId).getItemProperty(columnId);

@@ -8,6 +8,7 @@ import com.qgs.ui.window.base.BaseWindow;
 import com.qgs.ui.window.ordemservico.OrigemAtendimentoWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -25,7 +26,7 @@ public final class OrigemAtendimentoView extends BaseView<Integer, OrigemAtendim
     private OrigemAtendimentoWindow atrWindow;
 
     public OrigemAtendimentoView() {
-        super("origematendimento", "Cadastro de Origem Atendimento");
+        super("origematendimento", FontAwesome.MAIL_FORWARD, "Cadastro de Origem Atendimento");
 
     }
 

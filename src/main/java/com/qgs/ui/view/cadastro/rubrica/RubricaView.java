@@ -11,6 +11,7 @@ import com.qgs.ui.window.cadastro.rubrica.RubricaWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -32,7 +33,7 @@ public final class RubricaView extends BaseView<Integer, Rubrica> {
     private RubricaWindow rubricaWindow;
 
     public RubricaView() {
-        super("rubrica", "Cadastro de Rubrica");
+        super("rubrica", FontAwesome.DOLLAR, "Cadastro de Rubrica");
 
         getTable().addGeneratedColumn("tipoRubrica", (Table source, Object itemId, Object columnId) -> {
             Property<TipoRubrica> prop = source.getItem(itemId).getItemProperty(columnId);

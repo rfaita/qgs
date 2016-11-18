@@ -8,6 +8,7 @@ import com.qgs.ui.window.base.BaseWindow;
 import com.qgs.ui.window.setor.SetorWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -25,7 +26,7 @@ public final class SetorView extends BaseView<Integer, Setor> {
     private SetorWindow setorWindow;
 
     public SetorView() {
-        super("material", "Cadastro de Setores de Serviço");
+        super("material", FontAwesome.MAP, "Cadastro de Setores de Serviço");
     }
 
     private CheckBox getCkInativos() {

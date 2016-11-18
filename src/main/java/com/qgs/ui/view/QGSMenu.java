@@ -137,18 +137,22 @@ public class QGSMenu extends CustomComponent {
         if (items == null) {
             items = new LinkedHashMap<String, ItemMenu>();
 
+            items.put("gerencial", new ItemMenu("Gerêncial", "subMenu"));
             items.put(DashboardView.VIEW_ID, new ItemMenu("Dashboard", FontAwesome.DASHBOARD, SecurityRole.USER));
-            items.put(EPIView.VIEW_ID, new ItemMenu("EPI", FontAwesome.DIAMOND, SecurityRole.USER));
-            items.put(MaterialView.VIEW_ID, new ItemMenu("Material", FontAwesome.DIAMOND, SecurityRole.USER));
-            items.put(AtributoView.VIEW_ID, new ItemMenu("Atributo", FontAwesome.DIAMOND, SecurityRole.USER));
-            items.put(SetorView.VIEW_ID, new ItemMenu("Setor", FontAwesome.DIAMOND, SecurityRole.USER));
-            items.put(TipoDepartamentoView.VIEW_ID, new ItemMenu("Tipo departamento", FontAwesome.DIAMOND, SecurityRole.USER));
-            items.put(DepartamentoView.VIEW_ID, new ItemMenu("Departamento", FontAwesome.DIAMOND, SecurityRole.USER));
-            items.put(RubricaView.VIEW_ID, new ItemMenu("Rubrica", FontAwesome.DIAMOND, SecurityRole.USER));
-            items.put(ServicoView.VIEW_ID, new ItemMenu("Serviços", FontAwesome.OPENCART, SecurityRole.USER));
-            items.put(EquipeView.VIEW_ID, new ItemMenu("Equipes", FontAwesome.OPENCART, SecurityRole.USER));
-            items.put(FormaAtendimentoView.VIEW_ID, new ItemMenu("Formas de atendimento", FontAwesome.OPENCART, SecurityRole.USER));
-            items.put(OrigemAtendimentoView.VIEW_ID, new ItemMenu("Origens de atendimento", FontAwesome.OPENCART, SecurityRole.USER));
+            items.put("cadastro", new ItemMenu("Cadastros", "subMenu"));
+            items.put(EPIView.VIEW_ID, new ItemMenu("EPI", FontAwesome.SHIELD, SecurityRole.USER));
+            items.put(MaterialView.VIEW_ID, new ItemMenu("Material", FontAwesome.FLASK, SecurityRole.USER));
+            items.put(AtributoView.VIEW_ID, new ItemMenu("Atributo", FontAwesome.CUBES, SecurityRole.USER));
+            items.put(TipoDepartamentoView.VIEW_ID, new ItemMenu("Tipo departamento", FontAwesome.COG, SecurityRole.USER));
+            items.put(DepartamentoView.VIEW_ID, new ItemMenu("Departamento", FontAwesome.COGS, SecurityRole.USER));
+            items.put(RubricaView.VIEW_ID, new ItemMenu("Rubrica", FontAwesome.DOLLAR, SecurityRole.USER));
+            items.put(ServicoView.VIEW_ID, new ItemMenu("Serviços", FontAwesome.ARCHIVE, SecurityRole.USER));
+            items.put(EquipeView.VIEW_ID, new ItemMenu("Equipes", FontAwesome.GROUP, SecurityRole.USER));
+            items.put(FormaAtendimentoView.VIEW_ID, new ItemMenu("Formas de atendimento", FontAwesome.TAGS, SecurityRole.USER));
+            items.put(OrigemAtendimentoView.VIEW_ID, new ItemMenu("Origens de atendimento", FontAwesome.MAIL_FORWARD, SecurityRole.USER));
+            items.put("setorizacao", new ItemMenu("Setorização", "subMenu"));
+            items.put(SetorView.VIEW_ID, new ItemMenu("Setor", FontAwesome.MAP, SecurityRole.USER));
+
         }
         return items;
     }
@@ -160,7 +164,14 @@ public class QGSMenu extends CustomComponent {
 
             try {
                 for (final Map.Entry<String, ItemMenu> item : getItems().entrySet()) {
-                    if (securityUtils.hasPermission(item.getValue().getMinRole())) {
+
+                    if ("subMenu".equals(item.getValue().getType())) {
+                        Label label = new Label(item.getValue().getMenu(), ContentMode.HTML);
+                        label.setPrimaryStyleName(ValoTheme.MENU_SUBTITLE);
+                        label.addStyleName(ValoTheme.LABEL_H4);
+                        label.setSizeUndefined();
+                        contentItems.addComponent(label);
+                    } else if (securityUtils.hasPermission(item.getValue().getMinRole())) {
                         final Button b = new Button(item.getValue().getMenu(), item.getValue().getIcon());
                         b.addClickListener((Button.ClickEvent event) -> {
                             UI.getCurrent().getNavigator().navigateTo(item.getKey());
@@ -203,6 +214,7 @@ public class QGSMenu extends CustomComponent {
 
     public class ItemMenu {
 
+        private String type;
         private String menu;
         private Resource icon;
         private SecurityRole minRole;
@@ -231,10 +243,23 @@ public class QGSMenu extends CustomComponent {
             this.icon = icon;
         }
 
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
         public ItemMenu(String menu, Resource icon, SecurityRole minRole) {
             this.menu = menu;
             this.icon = icon;
             this.minRole = minRole;
+        }
+
+        public ItemMenu(String menu, String type) {
+            this.menu = menu;
+            this.type = type;
         }
 
     }

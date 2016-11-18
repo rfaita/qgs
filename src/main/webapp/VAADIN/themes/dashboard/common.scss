@@ -178,6 +178,13 @@
             white-space: normal;
         }
 
+
+        .v-caption {
+            display:inline;
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
         @include width-range($max: 800px) {
             padding-bottom: round($v-unit-size / 2);
             text-align: left;

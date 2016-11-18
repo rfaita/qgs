@@ -11,6 +11,7 @@ import com.qgs.ui.window.cadastro.servico.ServicoWindow;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -32,7 +33,7 @@ public final class ServicoView extends BaseView<Long, Servico> {
     private ServicoWindow servicoWindow;
 
     public ServicoView() {
-        super("servico", "Cadastro de Serviço");
+        super("servico", FontAwesome.ARCHIVE, "Cadastro de Serviço");
 
         getTable().addGeneratedColumn("tipoServico", (Table source, Object itemId, Object columnId) -> {
             Property<TipoServico> prop = source.getItem(itemId).getItemProperty(columnId);

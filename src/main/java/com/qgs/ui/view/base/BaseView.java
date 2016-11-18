@@ -13,6 +13,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
+import com.vaadin.server.Resource;
 import com.vaadin.server.Responsive;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -39,16 +40,16 @@ public abstract class BaseView<ID, T extends BaseBean<ID>> extends VerticalLayou
 
     private String[] defaultCollapsible = {};
 
-    public BaseView(String styleView, String title) {
-        this(styleView, title, new String[]{});
+    public BaseView(String styleView, Resource icon, String title) {
+        this(styleView, icon, title, new String[]{});
     }
 
-    public BaseView(String styleView, String title, String[] defaultCollapsible) {
+    public BaseView(String styleView, Resource icon, String title, String[] defaultCollapsible) {
         setSizeFull();
         addStyleName(styleView);
         addStyleName("view");
 
-        addComponent(getToolbar(title));
+        addComponent(getToolbar(icon, title));
 
         addComponent(getTable());
         setExpandRatio(getTable(), 1);
@@ -59,7 +60,7 @@ public abstract class BaseView<ID, T extends BaseBean<ID>> extends VerticalLayou
 
     }
 
-    private HorizontalLayout getToolbar(String t) {
+    private HorizontalLayout getToolbar(Resource icon, String t) {
         HorizontalLayout header = new HorizontalLayout();
         header.addStyleName("viewheader");
         header.setSpacing(true);

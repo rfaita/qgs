@@ -23,7 +23,7 @@ public class FormaAtendimentoWindow extends BaseWindow<Integer, FormaAtendimento
     private CheckBox ckAtivo;
 
     @EJB
-    private FormaAtendimentoService epiService;
+    private FormaAtendimentoService faService;
 
     public FormaAtendimentoWindow() {
         super("formaatendimentowindow", "Gestão de Forma Atendimento");
@@ -48,7 +48,7 @@ public class FormaAtendimentoWindow extends BaseWindow<Integer, FormaAtendimento
     @Override
     protected void doLoadDados(Integer id) {
         if (id != null && id > 0) {
-            setDado(epiService.findById(id));
+            setDado(faService.findById(id));
 
             getTxtId().setValue(getDado().getId() + "");
             getTxtDescricao().setValue(getDado().getDescricao());
@@ -95,7 +95,7 @@ public class FormaAtendimentoWindow extends BaseWindow<Integer, FormaAtendimento
         getDado().setAtivo(getCkAtivo().getValue());
 
         try {
-            epiService.save(getDado());
+            faService.save(getDado());
             QGSUI.showInfo("Dados salvos com sucesso.");
             sendRefresh();
             close();

@@ -12,6 +12,7 @@ import com.qgs.ui.view.cadastro.equipe.EquipeView;
 import com.qgs.ui.view.cadastro.rubrica.RubricaView;
 import com.qgs.ui.view.cadastro.servico.ServicoView;
 import com.qgs.ui.view.ordemservico.FormaAtendimentoView;
+import com.qgs.ui.view.ordemservico.GeracaoSolicitacaoView;
 import com.qgs.ui.view.ordemservico.OrigemAtendimentoView;
 import com.qgs.ui.view.setor.SetorView;
 import com.qgs.ui.window.UsuarioProvedorWindow;
@@ -137,6 +138,8 @@ public class QGSMenu extends CustomComponent {
         if (items == null) {
             items = new LinkedHashMap<String, ItemMenu>();
 
+            items.put("abertura", new ItemMenu("Abertura", "subMenu"));
+            items.put(GeracaoSolicitacaoView.VIEW_ID, new ItemMenu("Geração de solicitação", FontAwesome.CREATIVE_COMMONS, SecurityRole.USER));
             items.put("gerencial", new ItemMenu("Gerêncial", "subMenu"));
             items.put(DashboardView.VIEW_ID, new ItemMenu("Dashboard", FontAwesome.DASHBOARD, SecurityRole.USER));
             items.put("cadastro", new ItemMenu("Cadastros", "subMenu"));

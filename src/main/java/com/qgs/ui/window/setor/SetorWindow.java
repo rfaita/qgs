@@ -83,12 +83,12 @@ public class SetorWindow extends BaseWindow<Integer, Setor> {
         content.addComponent(h);
 
         content.addComponent(getTbSetorCriterio());
-        
+
         VerticalLayout vl = new VerticalLayout(content, getBtSave());
 
         vl.setComponentAlignment(getBtSave(), Alignment.BOTTOM_RIGHT);
         vl.setMargin(new MarginInfo(true));
-        
+
         setContent(vl);
 
         setWidth(800, Unit.PIXELS);
@@ -408,6 +408,12 @@ public class SetorWindow extends BaseWindow<Integer, Setor> {
                 getCmbCidade().setValue(null);
                 getCmbBairro().setValue(null);
                 getCmbLogradouro().setValue(null);
+                if (getTbSetorCriterio().getValue() != null) {
+                    SetorCriterio o = getBcSetorCriterio().getItem(getTbSetorCriterio().getValue()).getBean();
+                    getBcSetorCriterio().removeItem(o.getId());
+                } else {
+                    QGSUI.showWarn("Selecione o que deseja remover.");
+                }
 
             });
         }
@@ -480,21 +486,30 @@ public class SetorWindow extends BaseWindow<Integer, Setor> {
     }
 
     private void doLoadLogradouro() {
+        getCmbLogradouro().setValue(null);
         getBcLogradouro().removeAllItems();
         getBcLogradouro().addAll(listAllService.findAllByParam(Logradouro.class, "idBairro", getBcBairro().getItem(getCmbBairro().getValue()).getBean().getId()));
     }
 
     private void doLoadBairro() {
+        getCmbLogradouro().setValue(null);
         getBcBairro().removeAllItems();
         getBcBairro().addAll(listAllService.findAllByParam(Bairro.class, "idCidade", getBcCidade().getItem(getCmbCidade().getValue()).getBean().getId()));
     }
 
     private void doLoadCidade() {
+        getCmbCidade().setValue(null);
+        getCmbBairro().setValue(null);
+        getCmbLogradouro().setValue(null);
         getBcCidade().removeAllItems();
         getBcCidade().addAll(listAllService.findAllByParam(Cidade.class, "idUf", getBcUF().getItem(getCmbUF().getValue()).getBean().getId()));
     }
 
     private void doLoadUF() {
+        getCmbUF().setValue(null);
+        getCmbCidade().setValue(null);
+        getCmbBairro().setValue(null);
+        getCmbLogradouro().setValue(null);
         getBcUF().removeAllItems();
         getBcUF().addAll(listAllService.findAllByParam(UF.class, "idPais", getBcPais().getItem(getCmbPais().getValue()).getBean().getId()));
     }

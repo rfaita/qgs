@@ -21,9 +21,9 @@ public final class FormaAtendimentoView extends BaseView<Integer, FormaAtendimen
     private CheckBox ckInativos;
 
     @EJB
-    private FormaAtendimentoService atrService;
+    private FormaAtendimentoService faService;
     @Inject
-    private FormaAtendimentoWindow atrWindow;
+    private FormaAtendimentoWindow faWindow;
 
     public FormaAtendimentoView() {
         super("formaatendimento", FontAwesome.TAGS, "Cadastro de Forma Atendimento");
@@ -78,12 +78,12 @@ public final class FormaAtendimentoView extends BaseView<Integer, FormaAtendimen
             oTemp.setEmpresa(e);
         }
 
-        getContainer().addAll(atrService.findAllByFormaAtendimento(oTemp));
+        getContainer().addAll(faService.findAllByFormaAtendimento(oTemp));
     }
 
     @Override
     protected BaseWindow<Integer, FormaAtendimento> getBaseWindow() {
-        return atrWindow;
+        return faWindow;
     }
 
 }

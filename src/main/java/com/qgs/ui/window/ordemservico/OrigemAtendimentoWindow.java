@@ -23,7 +23,7 @@ public class OrigemAtendimentoWindow extends BaseWindow<Integer, OrigemAtendimen
     private CheckBox ckAtivo;
 
     @EJB
-    private OrigemAtendimentoService epiService;
+    private OrigemAtendimentoService oaService;
 
     public OrigemAtendimentoWindow() {
         super("origematendimentowindow", "Gestão de Origem Atendimento");
@@ -48,7 +48,7 @@ public class OrigemAtendimentoWindow extends BaseWindow<Integer, OrigemAtendimen
     @Override
     protected void doLoadDados(Integer id) {
         if (id != null && id > 0) {
-            setDado(epiService.findById(id));
+            setDado(oaService.findById(id));
 
             getTxtId().setValue(getDado().getId() + "");
             getTxtDescricao().setValue(getDado().getDescricao());
@@ -95,7 +95,7 @@ public class OrigemAtendimentoWindow extends BaseWindow<Integer, OrigemAtendimen
         getDado().setAtivo(getCkAtivo().getValue());
 
         try {
-            epiService.save(getDado());
+            oaService.save(getDado());
             QGSUI.showInfo("Dados salvos com sucesso.");
             sendRefresh();
             close();

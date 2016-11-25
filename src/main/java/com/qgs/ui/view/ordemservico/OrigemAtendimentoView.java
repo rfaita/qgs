@@ -21,9 +21,9 @@ public final class OrigemAtendimentoView extends BaseView<Integer, OrigemAtendim
     private CheckBox ckInativos;
 
     @EJB
-    private OrigemAtendimentoService atrService;
+    private OrigemAtendimentoService oaService;
     @Inject
-    private OrigemAtendimentoWindow atrWindow;
+    private OrigemAtendimentoWindow oaWindow;
 
     public OrigemAtendimentoView() {
         super("origematendimento", FontAwesome.MAIL_FORWARD, "Cadastro de Origem Atendimento");
@@ -78,12 +78,12 @@ public final class OrigemAtendimentoView extends BaseView<Integer, OrigemAtendim
             oTemp.setEmpresa(e);
         }
 
-        getContainer().addAll(atrService.findAllByOrigemAtendimento(oTemp));
+        getContainer().addAll(oaService.findAllByOrigemAtendimento(oTemp));
     }
 
     @Override
     protected BaseWindow<Integer, OrigemAtendimento> getBaseWindow() {
-        return atrWindow;
+        return oaWindow;
     }
 
 }

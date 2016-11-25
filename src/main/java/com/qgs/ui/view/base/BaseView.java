@@ -103,6 +103,7 @@ public abstract class BaseView<ID, T extends BaseBean<ID>> extends VerticalLayou
     protected Table getTable() {
         if (table == null) {
             table = new Table();
+            table.setId("dados");
             table.setSizeFull();
             table.addStyleName(ValoTheme.TABLE_BORDERLESS);
             table.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
@@ -140,6 +141,7 @@ public abstract class BaseView<ID, T extends BaseBean<ID>> extends VerticalLayou
     protected Button getBtnAdd() {
         if (btnAdd == null) {
             btnAdd = new Button(FontAwesome.PLUS);
+            btnAdd.setId("add");
             btnAdd.addClickListener((final Button.ClickEvent event) -> {
                 doAdd();
             });
@@ -150,6 +152,7 @@ public abstract class BaseView<ID, T extends BaseBean<ID>> extends VerticalLayou
     protected Button getBtnEdit() {
         if (btnEdit == null) {
             btnEdit = new Button(FontAwesome.PENCIL);
+            btnEdit.setId("edit");
             btnEdit.addClickListener((final Button.ClickEvent event) -> {
                 doEdit();
             });

@@ -5,7 +5,6 @@ import com.qgs.util.PersistenceUnitHelper;
 import com.qgs.util.security.SecurityRole;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import javax.ejb.Stateless;
 import javax.inject.Inject;

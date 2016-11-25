@@ -70,6 +70,7 @@ public abstract class BaseWindow<ID, T extends BaseBean<ID>> extends Window {
     protected TextField getTxtId() {
         if (txtId == null) {
             txtId = new TextField("Código");
+            txtId.setId("id");
             txtId.setEnabled(false);
             txtId.setWidth(100, Unit.PERCENTAGE);
         }
@@ -79,6 +80,7 @@ public abstract class BaseWindow<ID, T extends BaseBean<ID>> extends Window {
     protected Button getBtSave() {
         if (btSave == null) {
             btSave = new Button("Salvar");
+            btSave.setId("salvar");
             btSave.setIcon(FontAwesome.SAVE);
             btSave.addClickListener((Button.ClickEvent event) -> {
                 doSave();

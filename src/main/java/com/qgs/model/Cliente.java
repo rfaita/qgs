@@ -13,12 +13,21 @@ import javax.persistence.*;
  * @author rafael
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Cliente.findByNome", query = "SELECT o FROM Cliente o JOIN FETCH o.empresa WHERE upper(o.cliente) like :cliente AND o.empresa.id = :idEmpresa")
+    ,
+    @NamedQuery(name = "Cliente.findByCPF", query = "SELECT o FROM Cliente o JOIN FETCH o.empresa WHERE cpf = :cpf AND o.empresa.id = :idEmpresa")
+    ,
+    @NamedQuery(name = "Cliente.findByCNPJ", query = "SELECT o FROM Cliente o JOIN FETCH o.empresa WHERE cnpj = :cnpj AND o.empresa.id = :idEmpresa")
+    ,
+    @NamedQuery(name = "Cliente.findById", query = "SELECT o FROM Cliente o JOIN FETCH o.empresa WHERE id = :id AND o.empresa.id = :idEmpresa")
+})
 public class Cliente implements Serializable {
 
     @Id
     @SequenceGenerator(name = "seqclient", sequenceName = "seqclient", initialValue = 1000, allocationSize = 100)
     @GeneratedValue(generator = "seqclient")
-    private Integer id;
+    private Long id;
     private String cliente;
     private String rg;
     @ManyToOne
@@ -28,6 +37,7 @@ public class Cliente implements Serializable {
     private Date dataExpRG;
     private String orgExpRG;
     private String cpf;
+    private String cnpj;
     private String foneFixo;
     private String foneMovel;
     private String email;
@@ -36,6 +46,17 @@ public class Cliente implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataNascimento;
     private SexoEnum sexo;
+    @ManyToOne
+    @JoinColumn(name = "idempresa")
+    private Empresa empresa;
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
 
     public String getCliente() {
         return cliente;
@@ -101,11 +122,11 @@ public class Cliente implements Serializable {
         this.foneMovel = foneMovel;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -140,4 +161,13 @@ public class Cliente implements Serializable {
     public void setUfExpRg(UF ufExpRg) {
         this.ufExpRg = ufExpRg;
     }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
 }

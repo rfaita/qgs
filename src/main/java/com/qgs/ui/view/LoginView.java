@@ -65,6 +65,7 @@ public class LoginView extends VerticalLayout {
     private TextField getTxtUsuario() {
         if (txtUsuario == null) {
             txtUsuario = new TextField("Usuário");
+            txtUsuario.setId("usuario");
             txtUsuario.setIcon(FontAwesome.USER);
             txtUsuario.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
             txtUsuario.focus();
@@ -75,6 +76,7 @@ public class LoginView extends VerticalLayout {
     private PasswordField getTxtPassword() {
         if (txtPassword == null) {
             txtPassword = new PasswordField("Senha");
+            txtPassword.setId("senha");
             txtPassword.setIcon(FontAwesome.LOCK);
             txtPassword.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
         }
@@ -84,6 +86,7 @@ public class LoginView extends VerticalLayout {
     private Button getBtSignin() {
         if (btSignin == null) {
             btSignin = new Button("Entrar");
+            btSignin.setId("entrar");
             btSignin.addStyleName(ValoTheme.BUTTON_PRIMARY);
             btSignin.setClickShortcut(ShortcutAction.KeyCode.ENTER);
             btSignin.addClickListener((final Button.ClickEvent event) -> {

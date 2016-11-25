@@ -60,6 +60,7 @@ public class EPIWindow extends BaseWindow<Integer, EPI> {
     private TextField getTxtEPI() {
         if (txtEPI == null) {
             txtEPI = new TextField("EPI");
+            txtEPI.setId("epi");
             txtEPI.setWidth(100, Unit.PERCENTAGE);
             txtEPI.setRequired(true);
         }
@@ -69,6 +70,7 @@ public class EPIWindow extends BaseWindow<Integer, EPI> {
     private TextArea getTxtDescricao() {
         if (txtDescricao == null) {
             txtDescricao = new TextArea("Descrição");
+            txtDescricao.setId("descricao");
             txtDescricao.setWidth(100, Unit.PERCENTAGE);
             txtDescricao.setNullRepresentation("");
         }
@@ -78,6 +80,7 @@ public class EPIWindow extends BaseWindow<Integer, EPI> {
     private CheckBox getCkAtivo() {
         if (ckAtivo == null) {
             ckAtivo = new CheckBox("Ativo?");
+            ckAtivo.setId("ativo");
         }
         return ckAtivo;
     }

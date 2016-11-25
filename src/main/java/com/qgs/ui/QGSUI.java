@@ -108,6 +108,7 @@ public final class QGSUI extends UI {
 
     public static void showInfo(String m) {
         Notification n = new Notification(m, Notification.Type.HUMANIZED_MESSAGE);
+        n.setStyleName("infoNotification");
         n.setPosition(Position.TOP_RIGHT);
         n.setDelayMsec(3000);
         n.show(Page.getCurrent());
@@ -115,6 +116,7 @@ public final class QGSUI extends UI {
 
     public static void showWarn(String m) {
         Notification n = new Notification(m, Notification.Type.TRAY_NOTIFICATION);
+        n.setStyleName("warnNotification");
         n.setPosition(Position.TOP_RIGHT);
         n.setDelayMsec(4000);
         n.show(Page.getCurrent());
@@ -122,6 +124,7 @@ public final class QGSUI extends UI {
 
     public static void showError(String m) {
         Notification n = new Notification(m, Notification.Type.ERROR_MESSAGE);
+        n.setStyleName("errorNotification");
         n.setPosition(Position.TOP_RIGHT);
         n.setDelayMsec(4000);
         n.show(Page.getCurrent());

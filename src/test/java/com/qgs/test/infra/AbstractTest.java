@@ -1,7 +1,9 @@
-package com.qgs;
+package com.qgs.test.infra;
 
-import java.io.File;
+import java.util.zip.ZipFile;
+import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.importer.ZipImporter;
 import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.config.logging.Level;
 import org.wildfly.swarm.config.logging.Logger;
@@ -12,7 +14,6 @@ import org.wildfly.swarm.config.security.security_domain.authentication.LoginMod
 import org.wildfly.swarm.datasources.DatasourcesFraction;
 import org.wildfly.swarm.jpa.JPAFraction;
 import org.wildfly.swarm.logging.LoggingFraction;
-import org.wildfly.swarm.logging.LoggingProperties;
 import org.wildfly.swarm.security.SecurityFraction;
 import org.wildfly.swarm.undertow.WARArchive;
 import org.wildfly.swarm.undertow.descriptors.WebXmlAsset;
@@ -21,11 +22,25 @@ import org.wildfly.swarm.undertow.descriptors.WebXmlAsset;
  *
  * @author rafael
  */
-public class Main {
+public class AbstractTest {
 
-    public static void main(String args[]) throws Exception {
+    public static Archive createDeployment() throws Exception {
 
-        Swarm container = new Swarm(args);
+        WARArchive deployment = ShrinkWrap.create(ZipImporter.class, "qgs.war").importFrom(new ZipFile("target/project.war")).as(WARArchive.class);
+
+        WebXmlAsset webXmlAsset = deployment.findWebXmlAsset();
+        webXmlAsset.setLoginConfig("BASIC", "QGSdomain");
+        webXmlAsset.protect("/api/secure/*").withRole("*");
+
+        webXmlAsset.setContextParam("productionMode", "false");
+
+        deployment.setSecurityDomain("QGSdomain");
+
+        return deployment;
+    }
+
+    public static Swarm createContainer() throws Exception {
+        Swarm container = new Swarm();
 
         container.fraction(new DatasourcesFraction()
                 .dataSource("QGSDS", (ds) -> {
@@ -40,17 +55,9 @@ public class Main {
                 .defaultDatasource("jboss/datasources/QGSDS")
         );
 
-        Level leveLog;
-
-        if (System.getProperty(LoggingProperties.LOGGING) != null) {
-            leveLog = Level.valueOf(System.getProperty(LoggingProperties.LOGGING));
-        } else {
-            leveLog = Level.TRACE;
-        }
-
         container.fraction(new LoggingFraction()
-                .logger(new Logger("org.hibernate.SQL").level(leveLog))
-                .logger(new Logger("org.hibernate.type.descriptor.sql.BasicBinder").level(leveLog))
+                .logger(new Logger("org.hibernate.SQL").level(Level.TRACE))
+                .logger(new Logger("org.hibernate.type.descriptor.sql.BasicBinder").level(Level.TRACE))
         );
 
         container.fraction(SecurityFraction.defaultSecurityFraction()
@@ -63,23 +70,6 @@ public class Main {
                                 )))
         );
 
-        container.start();
-
-        WARArchive deployment = ShrinkWrap.createFromZipFile(WARArchive.class, new File("target/project.war"));
-
-        WebXmlAsset webXmlAsset = deployment.findWebXmlAsset();
-        webXmlAsset.setLoginConfig("BASIC", "QGSdomain");
-        webXmlAsset.protect("/api/secure/*").withRole("*");
-
-        webXmlAsset.setContextParam("productionMode", "false");
-
-        deployment.setSecurityDomain("QGSdomain");
-
-        //Or, you can add web.xml and jboss-web.xml from classpath or somewhere
-        //deployment.addAsWebInfResource(new ClassLoaderAsset("WEB-INF/web.xml", Main.class.getClassLoader()), "web.xml");
-        //deployment.addAsWebInfResource(new ClassLoaderAsset("WEB-INF/jboss-web.xml", Main.class.getClassLoader()), "jboss-web.xml");
-        container.deploy(deployment);
-
+        return container;
     }
-
 }

@@ -103,6 +103,10 @@ insert into formaatendimento(id, formaatendimento, ativo,  idempresa) values (2,
 insert into formaatendimento(id, formaatendimento, ativo,  idempresa) values (3, 'forma3', false, 1);
 insert into formaatendimento(id, formaatendimento, ativo,  idempresa) values (4, 'forma4', true, 2);
 
+insert into cliente (id, cliente, cpf, cnpj, email, idempresa) values (1, 'Rafael Faita', '34438746817', null, 'rfaita@gmail.com',1);
+insert into cliente (id, cliente, cpf, cnpj, email, idempresa) values (2, 'João Teixeira', '34438746818', null, 'teste@gmail.com',1);
+insert into cliente (id, cliente, cpf, cnpj, email, idempresa) values (3, 'Fernando Oliveira', null, '123123123', 'tesasda@gmail.com',1);
+
 insert into pais(id, pais, abrev) values (1, 'Brasil', 'BR');
 
 insert into uf (id, descricao, uf, idpais) values (1,'Acre','AC',1);
